@@ -1,34 +1,11 @@
-import {
-  Activity,
-  Building2,
-  Check,
-  Headphones,
-  Shield,
-  Zap,
-} from "lucide-react";
+import { Briefcase, Check, Headphones, Timer, Users } from "lucide-react";
 import ContactForm from "./ContactForm.jsx";
 
-const why = [
-  {
-    title: "High Performance",
-    Icon: Zap,
-    box: "bg-emerald-500/15 text-emerald-400 ring-emerald-500/40",
-  },
-  {
-    title: "Real-time Data",
-    Icon: Activity,
-    box: "bg-amber-500/15 text-amber-400 ring-amber-500/40",
-  },
-  {
-    title: "Secure & Reliable",
-    Icon: Shield,
-    box: "bg-violet-500/15 text-violet-400 ring-violet-500/40",
-  },
-  {
-    title: "24/7 Support",
-    Icon: Headphones,
-    box: "bg-purple-500/15 text-purple-400 ring-purple-500/40",
-  },
+const whyChoosePoints = [
+  "Expert Developers",
+  "On-time Delivery",
+  "Custom Solutions",
+  "End-to-End Support",
 ];
 
 const marketingItems = [
@@ -39,10 +16,68 @@ const marketingItems = [
   "Brand Building",
 ];
 
-/** Vertical sections: Marketing → Why Choose → About → Contact (formerly sidebar). */
+const trustStats = [
+  {
+    n: "5+",
+    label: "Years Experience",
+    Icon: Timer,
+    cardBorder: "border-amber-500/30 hover:border-amber-500/45",
+    iconWrap:
+      "bg-amber-500/10 text-amber-400 ring-amber-500/40 shadow-[0_0_16px_-4px_rgba(245,158,11,0.35)]",
+  },
+  {
+    n: "50+",
+    label: "Projects Completed",
+    Icon: Briefcase,
+    cardBorder: "border-emerald-500/30 hover:border-emerald-500/45",
+    iconWrap:
+      "bg-emerald-500/10 text-emerald-400 ring-emerald-500/40 shadow-[0_0_16px_-4px_rgba(52,211,153,0.3)]",
+  },
+  {
+    n: "100+",
+    label: "Happy Clients",
+    Icon: Users,
+    cardBorder: "border-blue-500/30 hover:border-blue-500/45",
+    iconWrap:
+      "bg-blue-500/10 text-blue-400 ring-blue-500/40 shadow-[0_0_16px_-4px_rgba(59,130,246,0.3)]",
+  },
+  {
+    n: "24/7",
+    label: "Customer Support",
+    Icon: Headphones,
+    cardBorder: "border-rose-500/30 hover:border-rose-500/45",
+    iconWrap:
+      "bg-rose-500/10 text-rose-400 ring-rose-500/40 shadow-[0_0_16px_-4px_rgba(244,63,94,0.3)]",
+  },
+];
+
+/** Vertical sections: Trust stats → Marketing → About BettingSolutions → Contact. */
 export default function BelowGameSections() {
   return (
     <div className="space-y-4 pb-8 md:space-y-6">
+      <section aria-label="Company highlights" className="px-0 pb-1 pt-0 sm:pb-2 md:pb-3">
+        <div className="grid grid-cols-2 gap-2.5 md:grid-cols-4 md:gap-3 lg:gap-4">
+          {trustStats.map(({ n, label, Icon, cardBorder, iconWrap }) => (
+            <div
+              key={label}
+              className={`flex min-w-0 items-center gap-2.5 rounded-xl border bg-transparent px-2.5 py-2.5 transition md:gap-3 md:px-3 md:py-3 ${cardBorder}`}
+            >
+              <span
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ring-1 md:h-11 md:w-11 ${iconWrap}`}
+              >
+                <Icon className="h-[18px] w-[18px] md:h-5 md:w-5" strokeWidth={1.5} aria-hidden />
+              </span>
+              <div className="min-w-0 text-left">
+                <p className="text-sm font-bold leading-none text-white md:text-base">{n}</p>
+                <p className="mt-1 text-[10px] font-medium leading-snug text-slate-400 md:text-xs">
+                  {label}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section
         id="digital-marketing"
         className="relative scroll-mt-28 min-h-[380px] overflow-hidden rounded-2xl border border-white/10 shadow-xl ring-1 ring-white/[0.06] sm:min-h-[400px] lg:min-h-[400px]"
@@ -91,50 +126,39 @@ export default function BelowGameSections() {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-white/10 bg-white/[0.05] p-4 shadow-xl backdrop-blur-md sm:p-5 md:p-6">
-        <h2 className="text-center text-lg font-bold leading-snug text-white md:text-left">
-          Why Choose Us
-        </h2>
-        <div className="mx-auto mt-5 grid max-w-xl grid-cols-2 gap-3 sm:max-w-2xl md:mx-0">
-          {why.map(({ title, Icon, box }) => (
-            <div
-              key={title}
-              className="rounded-xl border border-white/10 bg-white/[0.03] p-3 text-center transition-all duration-300 hover:scale-105 hover:border-emerald-500/40 hover:shadow-green-500/20"
-            >
-              <span
-                className={`mx-auto flex h-10 w-10 items-center justify-center rounded-lg ring-1 ${box}`}
-              >
-                <Icon className="h-5 w-5" strokeWidth={1.5} />
-              </span>
-              <p className="mt-2 text-xs font-semibold text-white">{title}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       <section
-        id="about-company"
-        className="scroll-mt-28 rounded-2xl border border-white/10 bg-white/[0.05] p-4 shadow-xl backdrop-blur-md sm:p-5 md:p-6"
+        id="why-choose-us"
+        className="relative scroll-mt-28 min-h-[380px] overflow-hidden rounded-2xl border border-white/10 shadow-xl ring-1 ring-white/[0.06] sm:min-h-[400px] lg:min-h-[400px]"
       >
-        <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-start sm:text-left">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-cyan-500/15 text-cyan-300 ring-1 ring-cyan-500/25 sm:mx-0">
-            <Building2 className="h-7 w-7" strokeWidth={1.5} />
-          </div>
-          <div>
-            <h2 className="text-lg font-bold text-white">About</h2>
-            <ul className="mx-auto mt-3 max-w-xs space-y-2 sm:mx-0">
-              <li className="flex items-center justify-center gap-2 text-sm text-slate-300 sm:justify-start">
-                <Check className="h-4 w-4 shrink-0 text-emerald-400" strokeWidth={2.5} />
-                5+ years experience
-              </li>
-              <li className="flex items-center justify-center gap-2 text-sm text-slate-300 sm:justify-start">
-                <Check className="h-4 w-4 shrink-0 text-emerald-400" strokeWidth={2.5} />
-                50+ projects
-              </li>
-              <li className="flex items-center justify-center gap-2 text-sm text-slate-300 sm:justify-start">
-                <Check className="h-4 w-4 shrink-0 text-emerald-400" strokeWidth={2.5} />
-                Expert developers
-              </li>
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-[#030508] bg-[url('/images/why-choose-bg.png')] bg-cover bg-[position:72%_center] sm:bg-[position:75%_center] lg:bg-right"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-r from-[#060912] via-[#060912]/94 to-[#060912]/30 sm:via-[#060912]/88 sm:to-[#060912]/18 lg:via-[#060912]/72 lg:to-transparent"
+        />
+        <div className="relative z-10 px-4 py-8 sm:px-6 sm:py-9 md:px-8 lg:max-w-[min(100%,520px)] lg:px-10 lg:py-9 lg:pb-8 xl:max-w-xl">
+          <div className="text-center lg:text-left">
+            <h2 className="text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl md:text-[2.15rem]">
+              About{" "}
+              <span className="text-lime-400 drop-shadow-[0_0_18px_rgba(163,230,53,0.4)]">
+                BettingSolutions
+              </span>
+            </h2>
+            <p className="mx-auto mt-4 max-w-lg text-sm font-normal leading-relaxed text-white/90 sm:text-base lg:mx-0">
+              We build advanced gaming and betting platforms with proven technology, clear delivery, and
+              dedicated support—so you can launch faster and scale with confidence.
+            </p>
+            <ul className="mx-auto mt-8 max-w-md space-y-4 text-left sm:max-w-lg lg:mx-0">
+              {whyChoosePoints.map((item) => (
+                <li key={item} className="flex items-center gap-3.5 text-sm font-medium text-white sm:text-[0.95rem]">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-lime-500 shadow-[0_0_14px_rgba(132,204,22,0.45)]">
+                    <Check className="h-4 w-4 text-white" strokeWidth={3} aria-hidden />
+                  </span>
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
         </div>

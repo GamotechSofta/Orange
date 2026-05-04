@@ -70,7 +70,7 @@ export default function Footer() {
             </p>
             <ul className="mt-4 space-y-2 text-sm">
               <li>
-                <a href="/#about-company" className="text-slate-400 hover:text-white">
+                <a href="/#why-choose-us" className="text-slate-400 hover:text-white">
                   About Us
                 </a>
               </li>

@@ -9,7 +9,7 @@ const links = [
   { label: "APIs", href: "#api-services" },
   { label: "Games", href: "#games" },
   { label: "Solutions", href: "#platform-solutions" },
-  { label: "About Us", href: "#about-company", mobileLabel: "About" },
+  { label: "About Us", href: "#why-choose-us", mobileLabel: "About" },
   { label: "Contact", href: "#get-in-touch" },
 ];
 
