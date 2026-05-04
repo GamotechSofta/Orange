@@ -3,7 +3,6 @@ import {
   Building2,
   Check,
   Headphones,
-  Megaphone,
   Shield,
   Zap,
 } from "lucide-react";
@@ -32,17 +31,66 @@ const why = [
   },
 ];
 
-const marketing = [
-  "SEO Optimization",
+const marketingItems = [
+  "Website SEO",
   "Social Media Marketing",
-  "Paid Ads",
-  "Branding",
+  "Result Promotion",
+  "Paid Advertising",
+  "Brand Building",
 ];
 
-/** Vertical sections: Why Choose → Marketing → About → Contact (formerly sidebar). */
+/** Vertical sections: Marketing → Why Choose → About → Contact (formerly sidebar). */
 export default function BelowGameSections() {
   return (
     <div className="space-y-4 pb-8 md:space-y-6">
+      <section
+        id="digital-marketing"
+        className="relative scroll-mt-28 min-h-[380px] overflow-hidden rounded-2xl border border-white/10 shadow-xl ring-1 ring-white/[0.06] sm:min-h-[400px] lg:min-h-[400px]"
+      >
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-[#030508] bg-[url('/images/digital-marketing-bg.png')] bg-cover bg-[position:70%_center] sm:bg-[position:72%_center] lg:bg-right"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-r from-[#050810] via-[#050810]/92 to-[#050810]/35 sm:via-[#050810]/85 sm:to-[#050810]/20 lg:via-[#050810]/78 lg:to-transparent"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.2] [background-image:linear-gradient(rgba(52,211,153,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(52,211,153,0.08)_1px,transparent_1px)] [background-size:28px_28px]"
+        />
+        <div className="relative z-10 px-4 py-8 sm:px-6 sm:py-10 md:px-8 md:py-11 lg:max-w-[min(100%,540px)] lg:px-10 lg:py-9 lg:pb-7 xl:max-w-xl">
+          <div className="text-center lg:text-left">
+            <h2 className="text-3xl font-extrabold leading-[1.15] tracking-tight text-white sm:text-4xl md:text-[2.35rem]">
+              Digital{" "}
+              <span className="text-emerald-400 drop-shadow-[0_0_18px_rgba(52,211,153,0.45)]">
+                Marketing
+              </span>{" "}
+              <span className="text-white">&amp; Promotion</span>
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-sm font-medium leading-relaxed text-slate-300 sm:text-base lg:mx-0">
+              We help you grow your platform with result promotion, SEO, social media marketing,
+              branding and user acquisition.
+            </p>
+            <ul className="mx-auto mt-8 max-w-md space-y-3.5 text-left sm:max-w-lg lg:mx-0">
+              {marketingItems.map((item) => (
+                <li
+                  key={item}
+                  className="flex items-start gap-3 text-sm font-medium text-slate-100 sm:text-[0.95rem]"
+                >
+                  <Check
+                    className="mt-0.5 h-5 w-5 shrink-0 text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]"
+                    strokeWidth={2.75}
+                    aria-hidden
+                  />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <section className="rounded-2xl border border-white/10 bg-white/[0.05] p-4 shadow-xl backdrop-blur-md sm:p-5 md:p-6">
         <h2 className="text-center text-lg font-bold leading-snug text-white md:text-left">
           Why Choose Us
@@ -61,31 +109,6 @@ export default function BelowGameSections() {
               <p className="mt-2 text-xs font-semibold text-white">{title}</p>
             </div>
           ))}
-        </div>
-      </section>
-
-      <section className="rounded-2xl border border-white/10 bg-white/[0.05] p-4 shadow-xl backdrop-blur-md sm:p-5 md:p-6">
-        <div className="flex flex-col gap-4 text-center sm:flex-row sm:items-start sm:text-left">
-          <div
-            className="mx-auto flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-purple-500/20 ring-1 ring-purple-500/40 sm:mx-0"
-            aria-hidden
-          >
-            <Megaphone className="h-7 w-7 text-purple-300" strokeWidth={1.5} />
-          </div>
-          <div className="min-w-0 flex-1">
-            <h2 className="text-lg font-bold text-white">Digital Marketing &amp; Promotion</h2>
-            <ul className="mx-auto mt-4 max-w-md space-y-2.5 sm:mx-0">
-              {marketing.map((item) => (
-                <li
-                  key={item}
-                  className="flex items-center justify-center gap-2.5 text-sm text-slate-300 sm:justify-start"
-                >
-                  <Check className="h-4 w-4 shrink-0 text-emerald-400" strokeWidth={2.5} />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
       </section>
 
