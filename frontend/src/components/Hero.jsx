@@ -21,7 +21,7 @@ const stats = [
     icon: Layers,
     n: "50+",
     l: "Projects Completed",
-    ring: "bg-amber-500/15 text-amber-400 ring-amber-500/30",
+    ring: "bg-amber-500/15 text-amber-400 ring-emerald-500/30",
   },
   {
     icon: Users,
@@ -31,54 +31,25 @@ const stats = [
   },
 ];
 
-function StatsGrid({ className = "" }) {
+function StatsCards({ className }) {
   return (
     <div className={className}>
       {stats.map(({ icon: Icon, n, l, ring }) => (
         <div
           key={l}
-          className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.06] px-2.5 py-2.5 backdrop-blur-md transition hover:border-emerald-500/25 sm:gap-3 sm:px-4 sm:py-3"
+          className="flex min-w-0 items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.06] px-2 py-2 backdrop-blur-md transition hover:border-emerald-500/25 sm:gap-3 sm:px-4 sm:py-3"
         >
           <span
-            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ring-1 sm:h-10 sm:w-10 ${ring}`}
+            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ring-1 sm:h-10 sm:w-10 ${ring}`}
           >
-            <Icon className="h-[18px] w-[18px] sm:h-5 sm:w-5" strokeWidth={1.5} />
+            <Icon className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={1.5} />
           </span>
           <div className="min-w-0 text-left">
-            <p className="text-sm font-bold text-white sm:text-lg">{n}</p>
-            <p className="text-[10px] leading-snug text-slate-400 sm:text-xs">{l}</p>
+            <p className="text-xs font-bold text-white sm:text-lg">{n}</p>
+            <p className="text-[9px] leading-snug text-slate-400 sm:text-xs">{l}</p>
           </div>
         </div>
       ))}
-    </div>
-  );
-}
-
-/** One row of stats, bottom-aligned on mobile hero image. */
-function MobileStatsBar() {
-  return (
-    <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-[#0B0F19] via-[#0B0F19]/88 to-transparent px-2 pb-3 pt-10 sm:px-3">
-      <div
-        className="mx-auto grid w-full max-w-[600px] grid-cols-3 gap-1.5 sm:gap-2"
-        role="list"
-        aria-label="Company highlights"
-      >
-        {stats.map(({ icon: Icon, n, l, ring }) => (
-          <div
-            key={l}
-            role="listitem"
-            className="flex flex-col items-center gap-1 rounded-xl border border-white/10 bg-white/[0.08] px-1.5 py-2 text-center backdrop-blur-md sm:px-2 sm:py-2.5"
-          >
-            <span
-              className={`flex h-7 w-7 items-center justify-center rounded-md ring-1 sm:h-8 sm:w-8 ${ring}`}
-            >
-              <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={1.5} />
-            </span>
-            <p className="text-xs font-bold leading-none text-white sm:text-sm">{n}</p>
-            <p className="text-[8px] font-medium leading-tight text-slate-400 sm:text-[10px]">{l}</p>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
@@ -106,14 +77,18 @@ export default function Hero() {
         />
 
         <div className="relative z-10 flex flex-col lg:absolute lg:inset-0 lg:justify-center">
-          {/* Mobile: 600×600 art */}
-          <div className="relative mx-auto aspect-square w-full max-w-[600px] shrink-0 overflow-hidden bg-[#0B0F19] lg:hidden">
-            <div
-              aria-hidden
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: `url(${HERO_MOBILE_TEXT_BG_URL})` }}
-            />
-            <MobileStatsBar />
+          {/* Mobile: image first, stats in flow below (not overlaid on the art) */}
+          <div className="flex flex-col lg:hidden">
+            <div className="relative mx-auto aspect-square w-full max-w-[600px] shrink-0 overflow-hidden bg-[#0B0F19]">
+              <div
+                aria-hidden
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: `url(${HERO_MOBILE_TEXT_BG_URL})` }}
+              />
+            </div>
+            <div className={`${edgeInsetX} mt-5 pb-8`}>
+              <StatsCards className="mx-auto grid w-full max-w-[600px] grid-cols-3 gap-1.5 sm:gap-3" />
+            </div>
           </div>
 
           {/* Desktop: full hero copy + stats */}
@@ -149,7 +124,7 @@ export default function Hero() {
                 </a>
               </div>
 
-              <StatsGrid className="mx-auto mt-8 grid max-w-2xl grid-cols-2 gap-2.5 sm:mt-10 sm:grid-cols-3 sm:gap-3 lg:mx-0 lg:max-w-2xl" />
+              <StatsCards className="mx-auto mt-8 grid max-w-2xl grid-cols-2 gap-2.5 sm:mt-10 sm:grid-cols-3 sm:gap-3 lg:mx-0 lg:max-w-2xl" />
             </div>
           </div>
         </div>
