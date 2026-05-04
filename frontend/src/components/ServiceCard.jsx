@@ -110,7 +110,7 @@ export default function ServiceCard({
     <article
       className={`group flex h-full flex-col transition-all duration-300 will-change-transform ${
         isApi
-          ? `relative overflow-hidden rounded-2xl border p-4 backdrop-blur-md sm:p-4 ${shell} hover:-translate-y-0.5 ${className}`
+          ? `relative overflow-hidden rounded-xl border p-2 backdrop-blur-md md:rounded-2xl md:p-4 ${shell} hover:-translate-y-0.5 ${className}`
           : `glass-card p-5 shadow-xl sm:p-6 ${glowStyles[glow] ?? glowStyles.green} ${className}`
       } ${!isApi ? "hover:scale-105" : ""} ${isApi ? "items-center text-center" : ""}`}
     >
@@ -124,7 +124,7 @@ export default function ServiceCard({
         <div
           className={`relative mb-3 flex shrink-0 items-center justify-center bg-white/[0.06] transition-all duration-300 ${
             isApi
-              ? `h-12 w-12 rounded-full border border-white/15 md:h-11 md:w-11 md:rounded-xl md:border-0 md:ring-1 ${ring} ${neon} group-hover:bg-white/[0.09]`
+              ? `mb-2 h-8 w-8 rounded-full border border-white/15 md:mb-3 md:h-11 md:w-11 md:rounded-xl md:border-0 md:ring-1 ${ring} ${neon} group-hover:bg-white/[0.09] [&_svg]:h-3.5 [&_svg]:w-3.5 md:[&_svg]:h-5 md:[&_svg]:w-5`
               : "mb-4 h-12 w-12 rounded-xl ring-1 ring-white/10 group-hover:bg-white/10"
           }`}
         >
@@ -132,18 +132,18 @@ export default function ServiceCard({
         </div>
       )}
       <h3
-        className={`font-bold text-white ${isApi ? "text-sm leading-tight sm:text-[0.95rem]" : "text-lg font-semibold"}`}
+        className={`font-bold text-white ${isApi ? "text-[9px] leading-tight md:text-sm lg:text-[0.95rem]" : "text-lg font-semibold"}`}
       >
         {title}
       </h3>
       <p
-        className={`text-slate-400 ${isApi ? "mt-2 flex-1 text-[11px] leading-snug sm:text-xs" : "mt-2 flex-1 text-sm leading-relaxed"}`}
+        className={`text-slate-400 ${isApi ? "mt-1 line-clamp-3 flex-1 text-[7.5px] leading-snug md:mt-2 md:line-clamp-none md:text-xs" : "mt-2 flex-1 text-sm leading-relaxed"}`}
       >
         {description}
       </p>
       <a
         href={ctaHref}
-        className={`mt-3 inline-flex min-h-[40px] touch-manipulation items-center justify-center text-sm font-semibold transition sm:min-h-0 ${
+        className={`inline-flex touch-manipulation items-center justify-center font-semibold transition ${isApi ? "mt-2 min-h-[34px] text-[8px] md:mt-3 md:min-h-0 md:text-sm" : "mt-3 min-h-[40px] text-sm sm:min-h-0"} ${
           isApi ? (ctaClassName || "text-emerald-400 hover:text-emerald-300") : ctaClassName
         }`}
       >

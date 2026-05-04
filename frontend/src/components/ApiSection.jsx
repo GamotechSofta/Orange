@@ -81,26 +81,21 @@ export default function ApiSection() {
   return (
     <section id="api-services" className="scroll-mt-28">
       <h2 className="text-center text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-[2rem]">
-        <span className="md:hidden">
-          Our <span className="text-emerald-400">API</span> Services
-        </span>
-        <span className="hidden md:inline">
-          Our Premium{" "}
-          <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-blue-500 bg-clip-text text-transparent">
-            API
-          </span>{" "}
-          Services
-        </span>
+        Our Premium{" "}
+        <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-blue-500 bg-clip-text text-transparent">
+          API
+        </span>{" "}
+        Services
       </h2>
       <p className="mx-auto mt-3 hidden max-w-2xl px-4 text-center text-sm font-medium leading-relaxed text-slate-400 md:block sm:text-base">
         Powerful &amp; real-time APIs to boost your platform performance
       </p>
-      <div className="mt-8 grid grid-cols-1 gap-4 md:grid md:grid-cols-4 md:gap-3 lg:grid-cols-4 xl:grid-cols-8 xl:gap-3">
+      <div className="mt-8 grid grid-cols-4 gap-1.5 md:gap-3 lg:grid-cols-4 xl:grid-cols-8 xl:gap-3">
         {apis.map((a) => (
           <ServiceCard
             key={a.title}
             variant="api"
-            className="w-full md:w-auto"
+            className="min-w-0 w-full md:w-auto"
             icon={a.icon}
             title={a.title}
             description={a.description}

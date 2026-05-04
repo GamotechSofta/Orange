@@ -76,13 +76,13 @@ export default function PlatformSection() {
       <h2 className="text-center text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-[2rem]">
         Our <span className="text-emerald-400">Platform</span> Solutions
       </h2>
-      <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5 lg:grid-cols-3 lg:gap-6">
+      <div className="mt-8 grid grid-cols-3 gap-1.5 sm:gap-2 md:grid-cols-2 md:gap-5 lg:grid-cols-3 lg:gap-6">
         {platforms.map((p) => {
           const { Icon } = p;
           return (
             <article
               key={p.title}
-              className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-[#0c101c]/90 shadow-lg backdrop-blur-md transition-all duration-300 ${p.borderHover} ${p.glow} hover:-translate-y-0.5`}
+              className={`group relative overflow-hidden rounded-xl border border-white/10 bg-[#0c101c]/90 shadow-lg backdrop-blur-md transition-all duration-300 max-md:min-w-0 md:rounded-2xl ${p.borderHover} ${p.glow} hover:-translate-y-0.5`}
             >
               <div
                 aria-hidden
@@ -92,20 +92,22 @@ export default function PlatformSection() {
                 aria-hidden
                 className={`pointer-events-none absolute inset-0 hidden bg-gradient-to-br opacity-[0.62] md:block ${p.gradient}`}
               />
-              <div className="relative flex flex-col items-center gap-3 p-4 text-center max-md:pt-5 md:flex-row md:items-start md:gap-3.5 md:p-4 md:text-left">
+              <div className="relative flex flex-col items-center gap-1.5 p-2 text-center max-md:pt-3 md:flex-row md:items-start md:gap-3.5 md:p-4 md:text-left">
                 <div
-                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.05] md:h-auto md:w-auto md:rounded-none md:border-0 md:bg-transparent ${p.iconClass}`}
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.05] md:h-auto md:w-auto md:rounded-none md:border-0 md:bg-transparent ${p.iconClass}`}
                 >
-                  <Icon className="h-9 w-9 md:h-11 md:w-11" strokeWidth={1.35} />
+                  <Icon className="h-5 w-5 md:h-11 md:w-11" strokeWidth={1.35} />
                 </div>
                 <div className="min-w-0 flex-1 md:text-left">
-                  <h3 className="text-sm font-bold leading-tight text-white sm:text-base">{p.title}</h3>
-                  <p className="mt-1.5 text-xs leading-normal text-slate-400 sm:text-sm sm:leading-snug">
+                  <h3 className="text-[9px] font-bold leading-tight text-white md:text-sm lg:text-base">
+                    {p.title}
+                  </h3>
+                  <p className="mt-1 line-clamp-4 text-[7.5px] leading-snug text-slate-400 md:mt-1.5 md:line-clamp-none md:text-xs md:leading-normal lg:text-sm lg:leading-snug">
                     {p.description}
                   </p>
                   <a
                     href="#get-in-touch"
-                    className={`mt-2.5 inline-flex min-h-[40px] touch-manipulation items-center justify-center py-1 text-xs font-semibold transition max-md:w-full sm:text-sm md:justify-start ${p.linkClass}`}
+                    className={`mt-1.5 inline-flex min-h-[32px] touch-manipulation items-center justify-center py-0.5 text-[8px] font-semibold transition max-md:w-full md:mt-2.5 md:min-h-[40px] md:justify-start md:py-1 md:text-xs lg:text-sm ${p.linkClass}`}
                   >
                     Learn More →
                   </a>
