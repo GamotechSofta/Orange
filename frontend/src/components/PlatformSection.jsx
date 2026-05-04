@@ -1,34 +1,71 @@
-import { CircleDot, Trophy, Users } from "lucide-react";
+import { ShipWheel, Trophy } from "lucide-react";
+
+/** Line-art style cricket bat + ball (reference UI). */
+function CricketStrokeIcon({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+      aria-hidden
+    >
+      <circle cx="6.5" cy="17" r="2.25" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M20 3.5 9.5 21.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M17.5 6.5 21 4.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 const platforms = [
   {
     title: "Satta Matka Platform Development",
     description:
       "Custom Satta Matka Software with panel, result, chart, jodi, panel management and more.",
-    icon: CircleDot,
-    iconWrap:
-      "bg-emerald-500/15 text-emerald-400 ring-emerald-500/40 shadow-[0_0_20px_rgba(34,197,94,0.2)]",
-    hoverBorder: "hover:border-emerald-500/40 hover:shadow-[0_0_24px_rgba(34,197,94,0.2)]",
+    Icon: ShipWheel,
+    iconClass: "text-emerald-400",
+    glowTop: "from-emerald-500/35 via-emerald-500/10",
+    gradient:
+      "from-emerald-500/[0.07] via-emerald-500/[0.02] to-transparent dark:from-emerald-500/10",
+    glow: "shadow-[0_0_22px_-10px_rgba(34,197,94,0.16)]",
+    borderHover: "hover:border-emerald-500/35",
     linkClass: "text-emerald-400 hover:text-emerald-300",
   },
   {
     title: "Betting Platform Development",
     description:
       "Full-featured betting platform for sports, casino, virtual games with multi-device support.",
-    icon: Trophy,
-    iconWrap:
-      "bg-purple-500/15 text-purple-300 ring-purple-500/40 shadow-[0_0_20px_rgba(168,85,247,0.2)]",
-    hoverBorder: "hover:border-purple-500/50 hover:shadow-[0_0_24px_rgba(168,85,247,0.25)]",
+    Icon: Trophy,
+    iconClass: "text-purple-400",
+    glowTop: "from-purple-500/35 via-purple-500/10",
+    gradient:
+      "from-purple-500/[0.07] via-purple-500/[0.02] to-transparent dark:from-purple-500/10",
+    glow: "shadow-[0_0_22px_-10px_rgba(168,85,247,0.16)]",
+    borderHover: "hover:border-purple-500/40",
     linkClass: "text-purple-400 hover:text-purple-300",
   },
   {
     title: "Cricket Exchange Software",
     description:
       "Advanced cricket exchange software with back/lay, fancy market, admin panel and more.",
-    icon: Users,
-    iconWrap:
-      "bg-amber-500/15 text-amber-400 ring-amber-500/40 shadow-[0_0_20px_rgba(245,158,11,0.2)]",
-    hoverBorder: "hover:border-amber-500/50 hover:shadow-[0_0_24px_rgba(245,158,11,0.25)]",
+    Icon: CricketStrokeIcon,
+    iconClass: "text-amber-400",
+    glowTop: "from-amber-500/35 via-amber-500/10",
+    gradient:
+      "from-amber-500/[0.07] via-amber-500/[0.02] to-transparent dark:from-amber-500/10",
+    glow: "shadow-[0_0_22px_-10px_rgba(245,158,11,0.16)]",
+    borderHover: "hover:border-amber-500/40",
     linkClass: "text-amber-400 hover:text-amber-300",
   },
 ];
@@ -36,30 +73,44 @@ const platforms = [
 export default function PlatformSection() {
   return (
     <section id="platform-solutions" className="scroll-mt-28">
-      <h2 className="text-center text-2xl font-bold text-white sm:text-3xl">
+      <h2 className="text-center text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-[2rem]">
         Our <span className="text-emerald-400">Platform</span> Solutions
       </h2>
       <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5 lg:grid-cols-3 lg:gap-6">
         {platforms.map((p) => {
-          const Icon = p.icon;
+          const { Icon } = p;
           return (
             <article
               key={p.title}
-              className={`flex h-full flex-col rounded-2xl border border-white/10 bg-white/[0.05] p-5 text-center shadow-xl backdrop-blur-md transition-all duration-300 sm:p-6 md:text-left ${p.hoverBorder} hover:scale-[1.02]`}
+              className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-[#0c101c]/90 shadow-lg backdrop-blur-md transition-all duration-300 ${p.borderHover} ${p.glow} hover:-translate-y-0.5`}
             >
               <div
-                className={`mx-auto flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ring-2 md:mx-0 ${p.iconWrap}`}
-              >
-                <Icon className="h-7 w-7" strokeWidth={1.5} />
+                aria-hidden
+                className={`pointer-events-none absolute inset-0 bg-gradient-to-b ${p.glowTop} to-transparent opacity-95 md:hidden`}
+              />
+              <div
+                aria-hidden
+                className={`pointer-events-none absolute inset-0 hidden bg-gradient-to-br opacity-[0.62] md:block ${p.gradient}`}
+              />
+              <div className="relative flex flex-col items-center gap-3 p-4 text-center max-md:pt-5 md:flex-row md:items-start md:gap-3.5 md:p-4 md:text-left">
+                <div
+                  className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.05] md:h-auto md:w-auto md:rounded-none md:border-0 md:bg-transparent ${p.iconClass}`}
+                >
+                  <Icon className="h-9 w-9 md:h-11 md:w-11" strokeWidth={1.35} />
+                </div>
+                <div className="min-w-0 flex-1 md:text-left">
+                  <h3 className="text-sm font-bold leading-tight text-white sm:text-base">{p.title}</h3>
+                  <p className="mt-1.5 text-xs leading-normal text-slate-400 sm:text-sm sm:leading-snug">
+                    {p.description}
+                  </p>
+                  <a
+                    href="#get-in-touch"
+                    className={`mt-2.5 inline-flex min-h-[40px] touch-manipulation items-center justify-center py-1 text-xs font-semibold transition max-md:w-full sm:text-sm md:justify-start ${p.linkClass}`}
+                  >
+                    Learn More →
+                  </a>
+                </div>
               </div>
-              <h3 className="mt-4 text-lg font-semibold text-white">{p.title}</h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-400">{p.description}</p>
-              <a
-                href="#get-in-touch"
-                className={`mt-4 inline-flex min-h-[44px] touch-manipulation items-center justify-center text-sm font-semibold transition md:justify-start ${p.linkClass}`}
-              >
-                Learn More →
-              </a>
             </article>
           );
         })}
