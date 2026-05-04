@@ -1,4 +1,10 @@
+import { ArrowRight, CheckCircle2, Mail, MessageSquare, Phone, User } from "lucide-react";
 import { useState } from "react";
+
+const inputBase =
+  "w-full min-h-[50px] rounded-xl border border-white/10 bg-[#0a0f18]/90 px-4 py-3 text-sm text-white shadow-inner shadow-black/20 outline-none backdrop-blur-sm transition placeholder:text-slate-500 focus:border-emerald-500/50 focus:bg-[#0a0f18] focus:ring-2 focus:ring-emerald-500/20";
+
+const labelClass = "mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-400";
 
 export default function ContactForm({ className = "" }) {
   const [sent, setSent] = useState(false);
@@ -9,47 +15,116 @@ export default function ContactForm({ className = "" }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={`space-y-3 ${className}`}>
-      <input
-        name="name"
-        type="text"
-        required
-        placeholder="Name"
-        autoComplete="name"
-        className="min-h-[48px] w-full touch-manipulation rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-500 outline-none backdrop-blur-sm transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/20"
-      />
-      <input
-        name="email"
-        type="email"
-        required
-        placeholder="Email"
-        autoComplete="email"
-        className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-500 outline-none backdrop-blur-sm transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/20"
-      />
-      <input
-        name="phone"
-        type="tel"
-        placeholder="Phone"
-        autoComplete="tel"
-        className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-500 outline-none backdrop-blur-sm transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/20"
-      />
-      <textarea
-        name="message"
-        required
-        rows={4}
-        placeholder="Message"
-        className="w-full resize-y rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-500 outline-none backdrop-blur-sm transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/20"
-      />
+    <form onSubmit={handleSubmit} className={`space-y-5 ${className}`}>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="contact-name" className={labelClass}>
+            Full name
+          </label>
+          <div className="relative">
+            <User
+              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+              strokeWidth={1.75}
+              aria-hidden
+            />
+            <input
+              id="contact-name"
+              name="name"
+              type="text"
+              required
+              placeholder="John Doe"
+              autoComplete="name"
+              className={`${inputBase} pl-11`}
+            />
+          </div>
+        </div>
+        <div>
+          <label htmlFor="contact-email" className={labelClass}>
+            Email
+          </label>
+          <div className="relative">
+            <Mail
+              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+              strokeWidth={1.75}
+              aria-hidden
+            />
+            <input
+              id="contact-email"
+              name="email"
+              type="email"
+              required
+              placeholder="you@company.com"
+              autoComplete="email"
+              className={`${inputBase} pl-11`}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label htmlFor="contact-phone" className={labelClass}>
+          Phone <span className="font-normal normal-case text-slate-500">(optional)</span>
+        </label>
+        <div className="relative">
+          <Phone
+            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+            strokeWidth={1.75}
+            aria-hidden
+          />
+          <input
+            id="contact-phone"
+            name="phone"
+            type="tel"
+            placeholder="+91 00000 00000"
+            autoComplete="tel"
+            className={`${inputBase} pl-11`}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label htmlFor="contact-message" className={labelClass}>
+          Message
+        </label>
+        <div className="relative">
+          <MessageSquare
+            className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-500"
+            strokeWidth={1.75}
+            aria-hidden
+          />
+          <textarea
+            id="contact-message"
+            name="message"
+            required
+            rows={5}
+            placeholder="Tell us about your project or requirements…"
+            className={`${inputBase} min-h-[140px] resize-y pl-11 pt-3.5`}
+          />
+        </div>
+      </div>
+
       <button
         type="submit"
-        className="min-h-[48px] w-full touch-manipulation rounded-full bg-gradient-to-r from-green-500 to-emerald-600 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all duration-300 hover:scale-105 hover:shadow-green-500/30"
+        className="group inline-flex min-h-[52px] w-full touch-manipulation items-center justify-center gap-2 rounded-full bg-gradient-to-r from-emerald-400 to-green-500 px-6 py-3 text-sm font-bold text-[#0B0F19] shadow-[0_0_24px_rgba(52,211,153,0.35)] transition duration-300 hover:scale-[1.02] hover:shadow-[0_0_32px_rgba(52,211,153,0.45)] active:scale-[0.99]"
       >
-        Submit
+        Send message
+        <ArrowRight
+          className="h-4 w-4 transition group-hover:translate-x-0.5"
+          strokeWidth={2.5}
+          aria-hidden
+        />
       </button>
+
       {sent && (
-        <p className="text-center text-xs text-emerald-400" role="status">
-          Thanks — we&apos;ll get back to you shortly.
-        </p>
+        <div
+          className="flex items-start gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3"
+          role="status"
+        >
+          <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-400" strokeWidth={2} aria-hidden />
+          <p className="text-sm font-medium leading-snug text-emerald-100">
+            Thanks — we&apos;ve received your message and will get back to you shortly.
+          </p>
+        </div>
       )}
     </form>
   );

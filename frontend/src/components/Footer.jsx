@@ -23,16 +23,16 @@ export default function Footer() {
           <div className="flex max-w-sm flex-col items-center md:items-start xl:col-span-2">
             <Link
               to="/"
-              className="flex items-center justify-center gap-2 text-lg font-bold text-white md:justify-start"
+              className="flex items-center justify-center gap-2 text-lg font-bold md:justify-start"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-glow">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 text-[#0B0F19] shadow-glow">
                 <Sparkles className="h-5 w-5" />
               </span>
-              BettingSolutions
+              <span className="text-orange-400">Orange</span>
             </Link>
             <p className="mt-3 text-sm leading-relaxed text-slate-400">
-              Powering Your Gaming Business. Advanced gaming and betting platform solutions,
-              APIs, and game development for serious operators.
+              Advanced gaming and betting platform solutions, APIs, and game development for serious
+              operators.
             </p>
           </div>
 
@@ -139,7 +139,7 @@ export default function Footer() {
         </div>
 
         <p className="mt-12 border-t border-white/10 pt-8 text-center text-xs text-slate-500">
-          © 2024 BettingSolutions. All Rights Reserved.
+          © 2024 Orange. All Rights Reserved.
         </p>
       </div>
     </footer>

@@ -166,11 +166,21 @@ export default function BelowGameSections() {
 
       <section
         id="get-in-touch"
-        className="scroll-mt-28 rounded-2xl border border-white/10 bg-white/[0.05] p-4 shadow-xl ring-1 ring-emerald-500/20 backdrop-blur-md sm:p-5 md:p-6"
+        className="scroll-mt-28 overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#0c101c]/95 to-[#070a10] p-5 shadow-xl ring-1 ring-emerald-500/20 backdrop-blur-md sm:p-6 md:p-8"
       >
-        <h2 className="text-center text-lg font-bold text-white md:text-left">Contact Form</h2>
-        <div className="mx-auto mt-6 max-w-xl md:mx-0">
-          <ContactForm />
+        <div className="mx-auto max-w-xl md:mx-0">
+          <h2 className="text-center text-2xl font-extrabold tracking-tight text-white md:text-left md:text-[1.65rem]">
+            Get in{" "}
+            <span className="bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent">
+              Touch
+            </span>
+          </h2>
+          <p className="mt-2 text-center text-sm text-slate-400 md:text-left">
+            Share your details and we&apos;ll respond as soon as possible.
+          </p>
+          <div className="mt-8">
+            <ContactForm />
+          </div>
         </div>
       </section>
     </div>

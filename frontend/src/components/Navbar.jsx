@@ -44,13 +44,8 @@ export default function Navbar() {
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 text-[#0B0F19] shadow-[0_0_20px_rgba(52,211,153,0.3)] sm:h-10 sm:w-10">
             <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />
           </span>
-          <span className="flex min-w-0 flex-col leading-tight">
-            <span className="text-sm font-bold tracking-tight text-white sm:text-base lg:text-lg">
-              BettingSolutions
-            </span>
-            <span className="hidden text-[10px] text-slate-400 sm:block sm:text-[11px]">
-              Powering Your Gaming Business
-            </span>
+          <span className="text-sm font-bold tracking-tight text-orange-400 sm:text-base lg:text-lg">
+            Orange
           </span>
         </Link>
 
