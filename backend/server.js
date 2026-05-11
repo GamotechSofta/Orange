@@ -17,14 +17,33 @@ connectDB();
 
 const app = express();
 
+/**
+ * CORS — supports:
+ *   - CORS_ORIGIN unset  ➜ allow ALL origins (handy for public read-only APIs)
+ *   - CORS_ORIGIN="*"    ➜ allow ALL origins
+ *   - CORS_ORIGIN="https://a.com,https://b.com"  ➜ allow only those
+ *
+ * Note: when allowing all origins we cannot also send credentials per the CORS spec,
+ * so credentials are only enabled when an explicit allow-list is configured.
+ */
+const rawCorsOrigin = (process.env.CORS_ORIGIN || "").trim();
+const allowAllOrigins = rawCorsOrigin === "" || rawCorsOrigin === "*";
+const allowedOrigins = allowAllOrigins
+  ? []
+  : rawCorsOrigin.split(",").map((o) => o.trim()).filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN
-      ? process.env.CORS_ORIGIN.split(",").map((o) => o.trim())
-      : "*",
-    credentials: true,
+    origin(origin, callback) {
+      if (allowAllOrigins) return callback(null, true);
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error(`CORS: origin ${origin} not allowed`));
+    },
+    credentials: !allowAllOrigins,
   })
 );
+app.options("*", cors());
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
