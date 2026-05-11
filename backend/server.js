@@ -1,7 +1,6 @@
 require("dotenv").config();
 
 const express = require("express");
-const cors = require("cors");
 const morgan = require("morgan");
 
 const connectDB = require("./config/db");
@@ -18,32 +17,19 @@ connectDB();
 const app = express();
 
 /**
- * CORS — supports:
- *   - CORS_ORIGIN unset  ➜ allow ALL origins (handy for public read-only APIs)
- *   - CORS_ORIGIN="*"    ➜ allow ALL origins
- *   - CORS_ORIGIN="https://a.com,https://b.com"  ➜ allow only those
- *
- * Note: when allowing all origins we cannot also send credentials per the CORS spec,
- * so credentials are only enabled when an explicit allow-list is configured.
+ * Permissive CORS — allow any origin, any method, any header.
+ * No env config needed.
  */
-const rawCorsOrigin = (process.env.CORS_ORIGIN || "").trim();
-const allowAllOrigins = rawCorsOrigin === "" || rawCorsOrigin === "*";
-const allowedOrigins = allowAllOrigins
-  ? []
-  : rawCorsOrigin.split(",").map((o) => o.trim()).filter(Boolean);
-
-app.use(
-  cors({
-    origin(origin, callback) {
-      if (allowAllOrigins) return callback(null, true);
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error(`CORS: origin ${origin} not allowed`));
-    },
-    credentials: !allowAllOrigins,
-  })
-);
-app.options("*", cors());
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    req.headers["access-control-request-headers"] || "*"
+  );
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -66,6 +52,12 @@ app.use("/api/auth", authRoutes);
 app.use("/api/platforms", platformRoutes);
 app.use("/api/api-services", apiServiceRoutes);
 app.use("/api/games", gameRoutes);
+
+app.use("/users", userRoutes);
+app.use("/auth", authRoutes);
+app.use("/platforms", platformRoutes);
+app.use("/api-services", apiServiceRoutes);
+app.use("/games", gameRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
