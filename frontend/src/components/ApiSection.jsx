@@ -48,10 +48,10 @@ export default function ApiSection() {
                   />
                 }
                 title={a.title}
-                description={a.description}
+                description={a.shortDescription || a.description}
                 glow={a.glow}
                 ctaText="View Details →"
-                ctaTo="/apis"
+                ctaTo={a._id ? `/apis/${a._id}` : "/apis"}
                 ctaClassName={a.ctaClass}
                 mobileTopFade={a.mobileTopFade}
               />

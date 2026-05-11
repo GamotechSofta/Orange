@@ -57,10 +57,62 @@ const platforms = [
   },
 ];
 
+const standardPricing = ({ starter = "$49", pro = "$199", enterprise = "Custom" } = {}) => [
+  {
+    name: "Starter",
+    price: starter,
+    period: "/month",
+    description: "Perfect for new platforms and pilots.",
+    features: ["Up to 10k requests/day", "Email support", "REST + WebSocket access"],
+    highlighted: false,
+  },
+  {
+    name: "Pro",
+    price: pro,
+    period: "/month",
+    description: "For growing platforms with active traffic.",
+    features: [
+      "Up to 500k requests/day",
+      "Priority chat support",
+      "99.9% uptime SLA",
+      "Webhook integrations",
+    ],
+    highlighted: true,
+  },
+  {
+    name: "Enterprise",
+    price: enterprise,
+    period: "",
+    description: "Custom volume + dedicated support.",
+    features: [
+      "Unlimited requests",
+      "Dedicated account manager",
+      "Custom SLA & on-prem options",
+    ],
+    highlighted: false,
+  },
+];
+
 const apiServices = [
   {
     title: "Casino API",
-    description: "Integrate 1000+ casino games in your platform.",
+    description:
+      "Integrate 1000+ premium casino games — slots, live dealer, roulette, blackjack — through a single API.",
+    shortDescription: "1000+ casino games in one API.",
+    features: [
+      "1000+ slots, live dealer, table games",
+      "Single integration, multiple providers",
+      "Real-time wallet & bet settlement",
+      "Multi-currency & multi-language",
+    ],
+    technicalDetails: [
+      "REST + WebSocket APIs",
+      "JSON payloads with OAuth2 auth",
+      "Signed webhook callbacks",
+      "Global edge CDN, p95 latency < 200ms",
+      "Sandbox environment included",
+    ],
+    pricingPlans: standardPricing({ starter: "$99", pro: "$399" }),
     iconName: "Dices",
     iconColorClass: "text-purple-400",
     glow: "purple",
@@ -70,7 +122,22 @@ const apiServices = [
   },
   {
     title: "Score API",
-    description: "Live score, lineups, commentary & more.",
+    description:
+      "Real-time scores, lineups, commentary, match events and player stats for every major sport.",
+    shortDescription: "Live scores & commentary.",
+    features: [
+      "Cricket, soccer, tennis, kabaddi & more",
+      "Ball-by-ball commentary",
+      "Live lineups & substitutions",
+      "Match events & player stats",
+    ],
+    technicalDetails: [
+      "Push updates via WebSocket",
+      "REST polling fallback available",
+      "JSON & XML payloads",
+      "< 1s update latency from source feed",
+    ],
+    pricingPlans: standardPricing({ starter: "$49", pro: "$199" }),
     iconName: "ClipboardList",
     iconColorClass: "text-emerald-400",
     glow: "emerald",
@@ -80,7 +147,22 @@ const apiServices = [
   },
   {
     title: "Odds API",
-    description: "Real-time odds for cricket, tennis, soccer.",
+    description:
+      "Real-time pre-match and in-play odds for cricket, tennis, soccer, kabaddi and more.",
+    shortDescription: "Real-time odds across sports.",
+    features: [
+      "Pre-match & in-play odds",
+      "Multiple bookmakers compared",
+      "Market-by-market breakdown",
+      "Configurable margin presets",
+    ],
+    technicalDetails: [
+      "WebSocket streaming for live updates",
+      "Snapshot REST fallback",
+      "p95 odds-update latency < 150ms",
+      "Configurable margin presets",
+    ],
+    pricingPlans: standardPricing({ starter: "$59", pro: "$249" }),
     iconName: "Crosshair",
     iconColorClass: "text-orange-400",
     glow: "orange",
@@ -90,7 +172,22 @@ const apiServices = [
   },
   {
     title: "Fancy API",
-    description: "Session fancy, player fancy, over fancy.",
+    description:
+      "Session fancy, player fancy and over fancy markets with low-latency updates.",
+    shortDescription: "Session, player & over fancy.",
+    features: [
+      "Session fancy markets",
+      "Player & over fancy markets",
+      "Auto market open/close",
+      "Result confirmation hooks",
+    ],
+    technicalDetails: [
+      "Persistent WebSocket connection per session",
+      "Idempotent settlement events",
+      "Built-in retry and deduplication",
+      "Result confirmation webhooks",
+    ],
+    pricingPlans: standardPricing({ starter: "$79", pro: "$299" }),
     iconName: "Trophy",
     iconColorClass: "text-fuchsia-400",
     glow: "fuchsia",
@@ -100,7 +197,22 @@ const apiServices = [
   },
   {
     title: "Fancy & Bookmaker API",
-    description: "Bookmaker & fancy market integration.",
+    description:
+      "Bookmaker plus fancy market integration with auto-settlement and result feeds.",
+    shortDescription: "Bookmaker + fancy combined.",
+    features: [
+      "Bookmaker odds in real time",
+      "Combined fancy + bookmaker streams",
+      "Auto-settlement engine",
+      "Detailed result feed",
+    ],
+    technicalDetails: [
+      "REST + WebSocket APIs",
+      "Webhook notifications for state changes",
+      "Replay endpoint for missed events",
+      "Auto-settlement engine",
+    ],
+    pricingPlans: standardPricing({ starter: "$89", pro: "$349" }),
     iconName: "CodeXml",
     iconColorClass: "text-blue-400",
     glow: "blue",
@@ -110,7 +222,22 @@ const apiServices = [
   },
   {
     title: "Sports Result API",
-    description: "Fast & accurate sports results API.",
+    description:
+      "Fast and accurate official sports results — within seconds of the live action ending.",
+    shortDescription: "Fast & accurate results.",
+    features: [
+      "Verified official results",
+      "Match summaries & scorecards",
+      "Historical archive",
+      "Push or pull delivery",
+    ],
+    technicalDetails: [
+      "REST endpoints + webhooks",
+      "Historical archive going back 10 years",
+      "JSON or CSV export",
+      "Match summaries & scorecards",
+    ],
+    pricingPlans: standardPricing({ starter: "$39", pro: "$149" }),
     iconName: "Disc3",
     iconColorClass: "text-teal-400",
     glow: "teal",
@@ -120,7 +247,22 @@ const apiServices = [
   },
   {
     title: "TV API",
-    description: "Live TV streaming API for sports & events.",
+    description:
+      "Live TV streaming for sports and events with adaptive bitrate and global CDN delivery.",
+    shortDescription: "Live TV streaming feed.",
+    features: [
+      "HD live streams",
+      "Adaptive bitrate (HLS / DASH)",
+      "Global CDN edge delivery",
+      "Token-protected playback URLs",
+    ],
+    technicalDetails: [
+      "HLS and DASH streaming protocols",
+      "Player SDKs for web, iOS, Android",
+      "Geo-restriction controls",
+      "Concurrent-stream limits per account",
+    ],
+    pricingPlans: standardPricing({ starter: "$129", pro: "$499" }),
     iconName: "Tv",
     iconColorClass: "text-violet-400",
     glow: "violet",
@@ -130,7 +272,22 @@ const apiServices = [
   },
   {
     title: "Betfair API",
-    description: "Integrate Betfair markets & data.",
+    description:
+      "Direct integration with Betfair markets — match odds, runner data, settlement and more.",
+    shortDescription: "Betfair markets & data.",
+    features: [
+      "Live Betfair markets",
+      "Runner-level data & books",
+      "Settlement & PnL feeds",
+      "Account & wallet APIs",
+    ],
+    technicalDetails: [
+      "Official Betfair endpoints proxied",
+      "Single unified auth flow",
+      "WebSocket streams for selected markets",
+      "PnL and settlement feeds",
+    ],
+    pricingPlans: standardPricing({ starter: "$99", pro: "$399" }),
     iconName: "Network",
     iconColorClass: "text-amber-300",
     glow: "gold",

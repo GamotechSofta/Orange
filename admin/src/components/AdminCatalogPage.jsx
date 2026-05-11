@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { Plus, Trash2, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -35,6 +35,26 @@ function castValue(value, type) {
     return Number.isFinite(n) ? n : 0;
   }
   if (type === "checkbox") return Boolean(value);
+  if (type === "stringList") {
+    if (Array.isArray(value)) return value.map((s) => String(s).trim()).filter(Boolean);
+    return String(value || "")
+      .split(/\r?\n/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
+  if (type === "pointList") {
+    const arr = Array.isArray(value) ? value : [];
+    return arr.map((s) => String(s ?? "").trim()).filter(Boolean);
+  }
+  if (type === "json") {
+    if (value === "" || value === undefined || value === null) return [];
+    if (typeof value === "object") return value;
+    try {
+      return JSON.parse(value);
+    } catch {
+      return value;
+    }
+  }
   return value;
 }
 
@@ -44,6 +64,82 @@ function buildPayload(formFields, formData) {
     payload[field.key] = castValue(formData[field.key], field.type);
   });
   return payload;
+}
+
+function fieldDisplayValue(value, type) {
+  if (type === "stringList") {
+    return Array.isArray(value) ? value.join("\n") : String(value ?? "");
+  }
+  if (type === "pointList") {
+    return Array.isArray(value) ? value : [];
+  }
+  if (type === "json") {
+    if (typeof value === "string") return value;
+    try {
+      return value ? JSON.stringify(value, null, 2) : "";
+    } catch {
+      return "";
+    }
+  }
+  return value ?? "";
+}
+
+function PointListEditor({ field, value, onChange, disabled }) {
+  const items = Array.isArray(value) ? value : [];
+  const baseInput =
+    "flex-1 rounded-lg border border-white/12 bg-[#0f1419] px-3 py-2 text-sm text-white outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20";
+
+  const update = (i, v) => {
+    const next = items.slice();
+    next[i] = v;
+    onChange(next);
+  };
+  const removeAt = (i) => onChange(items.filter((_, idx) => idx !== i));
+  const add = () => onChange([...items, ""]);
+
+  return (
+    <div className="space-y-2">
+      {items.length === 0 ? (
+        <p className="rounded-lg border border-dashed border-white/12 bg-[#0f1419] px-3 py-3 text-xs text-white/45">
+          No points yet — click <span className="text-violet-300">+ Add point</span> below to start.
+        </p>
+      ) : (
+        items.map((item, i) => (
+          <div key={i} className="flex items-start gap-2">
+            <span className="mt-2.5 w-5 shrink-0 text-right text-xs font-medium text-white/40">
+              {i + 1}.
+            </span>
+            <input
+              type="text"
+              disabled={disabled}
+              value={item ?? ""}
+              placeholder={field.placeholder || "Type a point…"}
+              onChange={(e) => update(i, e.target.value)}
+              className={baseInput}
+            />
+            <button
+              type="button"
+              disabled={disabled}
+              onClick={() => removeAt(i)}
+              aria-label={`Remove point ${i + 1}`}
+              className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-rose-400/30 bg-rose-500/10 text-rose-200 transition hover:bg-rose-500/20 disabled:opacity-50"
+            >
+              <Trash2 className="size-4" strokeWidth={1.75} />
+            </button>
+          </div>
+        ))
+      )}
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={add}
+        className="inline-flex items-center gap-1.5 rounded-lg border border-violet-400/35 bg-violet-500/10 px-3 py-1.5 text-xs font-semibold text-violet-200 transition hover:bg-violet-500/20 disabled:opacity-50"
+      >
+        <Plus className="size-3.5" strokeWidth={2} />
+        Add point
+      </button>
+    </div>
+  );
 }
 
 function prettyLabel(key) {
@@ -95,6 +191,46 @@ function FormFields({ formFields, formData, setFormData, disabled }) {
               }
               className={`${baseInput} min-h-[4.5rem] resize-y`}
             />
+          ) : field.type === "stringList" ? (
+            <>
+              <textarea
+                disabled={disabled}
+                rows={field.rows || 5}
+                placeholder={field.placeholder || "One item per line"}
+                value={fieldDisplayValue(formData[field.key], "stringList")}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, [field.key]: e.target.value }))
+                }
+                className={`${baseInput} min-h-[5.5rem] resize-y`}
+              />
+              <span className="text-[11px] text-white/40">One item per line.</span>
+            </>
+          ) : field.type === "pointList" ? (
+            <PointListEditor
+              field={field}
+              value={formData[field.key]}
+              onChange={(next) =>
+                setFormData((prev) => ({ ...prev, [field.key]: next }))
+              }
+              disabled={disabled}
+            />
+          ) : field.type === "json" ? (
+            <>
+              <textarea
+                disabled={disabled}
+                rows={field.rows || 10}
+                spellCheck="false"
+                placeholder={field.placeholder || "[]"}
+                value={fieldDisplayValue(formData[field.key], "json")}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, [field.key]: e.target.value }))
+                }
+                className={`${baseInput} min-h-[8rem] resize-y font-mono text-xs`}
+              />
+              <span className="text-[11px] text-white/40">
+                JSON. Saved as parsed value; invalid JSON saves as raw text (you'll see a server error).
+              </span>
+            </>
           ) : (
             <input
               type={field.type === "number" ? "number" : "text"}
@@ -266,7 +402,16 @@ export default function AdminCatalogPage({
   const openEdit = (item) => {
     const next = {};
     formFields.forEach((field) => {
-      next[field.key] = item[field.key];
+      const v = item[field.key];
+      if (field.type === "stringList") {
+        next[field.key] = Array.isArray(v) ? v.join("\n") : v || "";
+      } else if (field.type === "pointList") {
+        next[field.key] = Array.isArray(v) ? v.slice() : [];
+      } else if (field.type === "json") {
+        next[field.key] = fieldDisplayValue(v, "json");
+      } else {
+        next[field.key] = v;
+      }
     });
     setFormData(next);
     setEditItem(item);

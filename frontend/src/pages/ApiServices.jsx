@@ -1,23 +1,10 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, CheckCircle2, ShieldCheck, Zap, Activity } from "lucide-react";
+import { ArrowRight, CheckCircle2, Zap } from "lucide-react";
 import useApiResource from "../hooks/useApiResource.js";
 import { api } from "../lib/api.js";
 import { getIcon } from "../lib/iconRegistry.jsx";
 import { pageShell } from "../constants/layout.js";
-
-const featureFallbacks = [
-  "Real-time data streaming",
-  "Easy REST integration",
-  "Detailed documentation",
-  "24/7 technical support",
-];
-
-const stats = [
-  { Icon: Activity, label: "Uptime", value: "99.9%" },
-  { Icon: Zap, label: "Latency", value: "<150ms" },
-  { Icon: ShieldCheck, label: "Secure", value: "TLS 1.3" },
-];
 
 export default function ApiServices() {
   const { data: apis, loading, error } = useApiResource(() => api.getApiServices(), []);
@@ -47,25 +34,6 @@ export default function ApiServices() {
             Powerful, real-time APIs to power every part of your gaming platform — from live scores
             and odds to casino integrations and streaming.
           </p>
-
-          <div className="mt-8 grid grid-cols-3 gap-3 sm:mt-10 sm:gap-4">
-            {stats.map(({ Icon, label, value }) => (
-              <div
-                key={label}
-                className="rounded-2xl border border-white/10 bg-white/[0.03] p-3 backdrop-blur-md sm:p-5"
-              >
-                <Icon
-                  className="mx-auto h-4 w-4 text-violet-300 sm:h-5 sm:w-5"
-                  strokeWidth={1.5}
-                  aria-hidden
-                />
-                <p className="mt-1.5 text-base font-bold text-white sm:mt-2 sm:text-xl">{value}</p>
-                <p className="text-[10px] uppercase tracking-wide text-slate-400 sm:text-xs">
-                  {label}
-                </p>
-              </div>
-            ))}
-          </div>
         </section>
 
         {/* Grid */}
@@ -119,7 +87,7 @@ export default function ApiServices() {
 
 function ApiDetailCard({ api: a }) {
   const Icon = getIcon(a.iconName);
-  const features = Array.isArray(a.features) && a.features.length ? a.features : featureFallbacks;
+  const features = Array.isArray(a.features) ? a.features : [];
 
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111622]/95 p-5 shadow-lg backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 sm:p-6">
@@ -138,30 +106,36 @@ function ApiDetailCard({ api: a }) {
         </div>
         <div className="min-w-0 flex-1">
           <h3 className="text-base font-bold text-white sm:text-lg">{a.title}</h3>
-          <p className="mt-1 text-xs text-slate-400 sm:text-sm">{a.description}</p>
+          <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+            {a.shortDescription || a.description}
+          </p>
         </div>
       </div>
 
-      <ul className="relative mt-5 space-y-2">
-        {features.map((f) => (
-          <li key={f} className="flex items-start gap-2 text-xs text-slate-300 sm:text-sm">
-            <CheckCircle2
-              className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400/90"
-              strokeWidth={2}
-              aria-hidden
-            />
-            <span>{f}</span>
-          </li>
-        ))}
-      </ul>
+      {features.length ? (
+        <ul className="relative mt-5 space-y-2">
+          {features.slice(0, 4).map((f) => (
+            <li key={f} className="flex items-start gap-2 text-xs text-slate-300 sm:text-sm">
+              <CheckCircle2
+                className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400/90"
+                strokeWidth={2}
+                aria-hidden
+              />
+              <span>{f}</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="relative mt-5 flex-1" />
+      )}
 
       <Link
-        to="/#get-in-touch"
+        to={a._id ? `/apis/${a._id}` : "/apis"}
         className={`relative mt-6 inline-flex min-h-[40px] items-center justify-between rounded-lg border border-white/15 px-4 py-2 text-xs font-semibold transition hover:bg-white/[0.05] sm:text-sm ${
           a.ctaClass || "text-violet-300 hover:text-violet-200"
         }`}
       >
-        Get Started
+        View Details
         <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" strokeWidth={2} />
       </Link>
     </article>

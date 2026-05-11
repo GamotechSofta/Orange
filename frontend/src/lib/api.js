@@ -44,6 +44,7 @@ export async function apiFetch(path, options = {}) {
 export const api = {
   getPlatforms: () => apiFetch("/platforms"),
   getApiServices: () => apiFetch("/api-services"),
+  getApiServiceById: (id) => apiFetch(`/api-services/${id}`),
   getGames: () => apiFetch("/games"),
   getUsers: (query = {}) => {
     const qs = new URLSearchParams(query).toString();
