@@ -1,17 +1,5 @@
 const mongoose = require("mongoose");
 
-const pricingPlanSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true, trim: true },
-    price: { type: String, default: "", trim: true },
-    period: { type: String, default: "", trim: true },
-    description: { type: String, default: "", trim: true },
-    features: { type: [String], default: [] },
-    highlighted: { type: Boolean, default: false },
-  },
-  { _id: false }
-);
-
 const apiServiceSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
@@ -24,9 +12,6 @@ const apiServiceSchema = new mongoose.Schema(
     /** Bullet list of technical details (protocols, formats, rate-limits, regions, etc.). */
     technicalDetails: { type: [String], default: [] },
 
-    /** Pricing tiers — empty array means "Contact us for pricing". */
-    pricingPlans: { type: [pricingPlanSchema], default: [] },
-
     iconName: { type: String, default: "Dices" },
     iconColorClass: { type: String, default: "text-purple-400" },
 
@@ -37,7 +22,6 @@ const apiServiceSchema = new mongoose.Schema(
       default: "text-purple-400 hover:text-purple-300",
     },
 
-    order: { type: Number, default: 0, index: true },
     active: { type: Boolean, default: true, index: true },
   },
   { timestamps: true }

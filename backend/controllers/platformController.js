@@ -1,6 +1,7 @@
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
 const Platform = require("../models/Platform");
+const { applyAutoTheme } = require("../utils/platformThemes");
 
 /**
  * @desc    List active platform solutions, ordered for the homepage grid
@@ -18,7 +19,9 @@ const getPlatforms = asyncHandler(async (req, res) => {
  * @access  Private/Admin
  */
 const createPlatform = asyncHandler(async (req, res) => {
-  const platform = await Platform.create(req.body);
+  const count = await Platform.countDocuments();
+  const payload = applyAutoTheme(req.body, count);
+  const platform = await Platform.create(payload);
   res.status(201).json({ success: true, data: platform });
 });
 

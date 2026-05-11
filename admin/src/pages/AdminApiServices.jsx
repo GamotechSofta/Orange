@@ -24,7 +24,6 @@ const columns = [
     label: "Tech",
     render: (v) => (Array.isArray(v) && v.length ? `${v.length}` : "—"),
   },
-  { key: "iconName", label: "Icon" },
   { key: "active", label: "Active", render: (v) => (v ? "Yes" : "No") },
 ];
 
@@ -57,11 +56,6 @@ const formFields = [
     fullWidth: true,
     placeholder: "Type a technical detail, e.g. REST + WebSocket APIs",
   },
-  { key: "iconName", label: "Icon name", type: "text" },
-  { key: "iconColorClass", label: "Icon color class", type: "text" },
-  { key: "glow", label: "Glow", type: "text" },
-  { key: "mobileTopFade", label: "Mobile top fade", type: "text" },
-  { key: "ctaClass", label: "CTA class", type: "text", fullWidth: true },
   { key: "active", label: "Active", type: "checkbox" },
 ];
 
@@ -72,11 +66,6 @@ function getEmptyForm() {
     description: "",
     features: [],
     technicalDetails: [],
-    iconName: "Dices",
-    iconColorClass: "text-purple-400",
-    glow: "purple",
-    mobileTopFade: "from-purple-500/30",
-    ctaClass: "text-purple-400 hover:text-purple-300",
     active: true,
   };
 }

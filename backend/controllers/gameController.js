@@ -1,6 +1,7 @@
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
 const Game = require("../models/Game");
+const { applyAutoTheme } = require("../utils/gameThemes");
 
 /**
  * @desc    List active games for the homepage grid
@@ -13,7 +14,9 @@ const getGames = asyncHandler(async (req, res) => {
 });
 
 const createGame = asyncHandler(async (req, res) => {
-  const item = await Game.create(req.body);
+  const count = await Game.countDocuments();
+  const payload = applyAutoTheme(req.body, count);
+  const item = await Game.create(payload);
   res.status(201).json({ success: true, data: item });
 });
 

@@ -1,6 +1,7 @@
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
 const ApiService = require("../models/ApiService");
+const { applyAutoTheme } = require("../utils/apiServiceThemes");
 
 /**
  * @desc    List active API services for the homepage grid
@@ -8,12 +9,14 @@ const ApiService = require("../models/ApiService");
  * @access  Public
  */
 const getApiServices = asyncHandler(async (req, res) => {
-  const items = await ApiService.find({ active: true }).sort({ order: 1, createdAt: 1 });
+  const items = await ApiService.find({ active: true }).sort({ createdAt: 1 });
   res.json({ success: true, count: items.length, data: items });
 });
 
 const createApiService = asyncHandler(async (req, res) => {
-  const item = await ApiService.create(req.body);
+  const count = await ApiService.countDocuments();
+  const payload = applyAutoTheme(req.body, count);
+  const item = await ApiService.create(payload);
   res.status(201).json({ success: true, data: item });
 });
 
@@ -44,7 +47,7 @@ const deleteApiService = asyncHandler(async (req, res) => {
  * @access  Private/Admin
  */
 const getAllApiServicesAdmin = asyncHandler(async (req, res) => {
-  const items = await ApiService.find({}).sort({ order: 1, createdAt: 1 });
+  const items = await ApiService.find({}).sort({ createdAt: 1 });
   res.json({ success: true, count: items.length, data: items });
 });
 

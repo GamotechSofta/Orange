@@ -50,12 +50,6 @@ export default function PlatformSection() {
                     <p className="mt-1 line-clamp-4 text-[7.5px] leading-snug text-slate-400 md:mt-1.5 md:line-clamp-none md:text-xs md:leading-normal lg:text-sm lg:leading-snug">
                       {p.description}
                     </p>
-                    <a
-                      href="#get-in-touch"
-                      className={`mt-1.5 inline-flex min-h-[32px] touch-manipulation items-center justify-center py-0.5 text-[8px] font-semibold transition max-md:w-full md:mt-2.5 md:min-h-[40px] md:justify-start md:py-1 md:text-xs lg:text-sm ${p.linkClass}`}
-                    >
-                      Learn More →
-                    </a>
                   </div>
                 </div>
               </article>
