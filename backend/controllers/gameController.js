@@ -38,8 +38,19 @@ const deleteGame = asyncHandler(async (req, res) => {
   res.json({ success: true, message: "Game removed" });
 });
 
+/**
+ * @desc    List all games (admin)
+ * @route   GET /api/games/all
+ * @access  Private/Admin
+ */
+const getAllGamesAdmin = asyncHandler(async (req, res) => {
+  const items = await Game.find({}).sort({ order: 1, createdAt: 1 });
+  res.json({ success: true, count: items.length, data: items });
+});
+
 module.exports = {
   getGames,
+  getAllGamesAdmin,
   createGame,
   getGameById,
   updateGame,

@@ -38,8 +38,19 @@ const deleteApiService = asyncHandler(async (req, res) => {
   res.json({ success: true, message: "API service removed" });
 });
 
+/**
+ * @desc    List all API services (admin)
+ * @route   GET /api/api-services/all
+ * @access  Private/Admin
+ */
+const getAllApiServicesAdmin = asyncHandler(async (req, res) => {
+  const items = await ApiService.find({}).sort({ order: 1, createdAt: 1 });
+  res.json({ success: true, count: items.length, data: items });
+});
+
 module.exports = {
   getApiServices,
+  getAllApiServicesAdmin,
   createApiService,
   getApiServiceById,
   updateApiService,

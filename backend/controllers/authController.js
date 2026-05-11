@@ -44,6 +44,10 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(401, "Invalid email or password");
   }
 
+  if (user.role !== "admin") {
+    throw new ApiError(403, "Admin panel access requires an admin account");
+  }
+
   res.json({
     success: true,
     data: user,
@@ -60,4 +64,48 @@ const getMe = asyncHandler(async (req, res) => {
   res.json({ success: true, data: req.user });
 });
 
-module.exports = { registerUser, loginUser, getMe };
+/**
+ * @desc    Update logged-in user profile (name, email, optional password)
+ * @route   PUT /api/auth/me
+ * @access  Private
+ */
+const updateMe = asyncHandler(async (req, res) => {
+  const { name, email, currentPassword, newPassword } = req.body;
+
+  const user = await User.findById(req.user._id).select("+password");
+  if (!user) throw new ApiError(401, "User not found");
+
+  if (name !== undefined && name !== null) {
+    const trimmed = String(name).trim();
+    if (!trimmed) throw new ApiError(400, "Name cannot be empty");
+    user.name = trimmed;
+  }
+
+  if (email !== undefined && email !== null) {
+    const nextEmail = String(email).trim().toLowerCase();
+    if (nextEmail !== user.email) {
+      const taken = await User.findOne({ email: nextEmail });
+      if (taken) throw new ApiError(409, "Email already in use");
+      user.email = nextEmail;
+    }
+  }
+
+  if (newPassword) {
+    if (!currentPassword) {
+      throw new ApiError(400, "Current password is required to set a new password");
+    }
+    if (!(await user.matchPassword(currentPassword))) {
+      throw new ApiError(401, "Current password is incorrect");
+    }
+    if (String(newPassword).length < 6) {
+      throw new ApiError(400, "New password must be at least 6 characters");
+    }
+    user.password = newPassword;
+  }
+
+  const updated = await user.save();
+  const out = updated.toJSON();
+  res.json({ success: true, data: out });
+});
+
+module.exports = { registerUser, loginUser, getMe, updateMe };

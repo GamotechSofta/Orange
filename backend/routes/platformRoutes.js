@@ -1,6 +1,7 @@
 const express = require("express");
 const {
   getPlatforms,
+  getAllPlatformsAdmin,
   createPlatform,
   getPlatformById,
   updatePlatform,
@@ -9,6 +10,8 @@ const {
 const { protect, authorize } = require("../middleware/authMiddleware");
 
 const router = express.Router();
+
+router.get("/all", protect, authorize("admin"), getAllPlatformsAdmin);
 
 router
   .route("/")

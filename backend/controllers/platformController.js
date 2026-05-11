@@ -43,8 +43,19 @@ const deletePlatform = asyncHandler(async (req, res) => {
   res.json({ success: true, message: "Platform removed" });
 });
 
+/**
+ * @desc    List all platforms (admin)
+ * @route   GET /api/platforms/all
+ * @access  Private/Admin
+ */
+const getAllPlatformsAdmin = asyncHandler(async (req, res) => {
+  const items = await Platform.find({}).sort({ order: 1, createdAt: 1 });
+  res.json({ success: true, count: items.length, data: items });
+});
+
 module.exports = {
   getPlatforms,
+  getAllPlatformsAdmin,
   createPlatform,
   getPlatformById,
   updatePlatform,
