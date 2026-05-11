@@ -6,6 +6,7 @@ import Services from "./pages/Services.jsx";
 import Contact from "./pages/Contact.jsx";
 import ApiServices from "./pages/ApiServices.jsx";
 import ApiServiceDetail from "./pages/ApiServiceDetail.jsx";
+import Games from "./pages/Games.jsx";
 
 function Layout() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/apis" element={<ApiServices />} />
         <Route path="/apis/:id" element={<ApiServiceDetail />} />
+        <Route path="/games" element={<Games />} />
         <Route path="/contact" element={<Contact />} />
       </Route>
     </Routes>

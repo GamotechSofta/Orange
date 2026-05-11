@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import GameCard from "./GameCard.jsx";
 import useApiResource from "../hooks/useApiResource.js";
 import { api } from "../lib/api.js";
@@ -47,8 +48,8 @@ export default function GameSection() {
             ))}
           </div>
           <div className="mt-10 flex justify-center sm:mt-12">
-            <a
-              href="#games"
+            <Link
+              to="/games"
               className="inline-flex min-h-[48px] touch-manipulation items-center gap-2 rounded-full border border-white/25 bg-transparent px-6 py-3 text-sm font-semibold text-white transition duration-300 hover:border-white/40 hover:bg-white/5 sm:min-h-[44px] sm:px-8 sm:text-base"
             >
               View All Games
@@ -57,7 +58,7 @@ export default function GameSection() {
                 strokeWidth={2}
                 aria-hidden
               />
-            </a>
+            </Link>
           </div>
         </>
       )}

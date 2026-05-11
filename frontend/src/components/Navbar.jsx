@@ -3,14 +3,11 @@ import { Link } from "react-router-dom";
 import { Menu, Sparkles, X } from "lucide-react";
 import { edgeInsetX } from "../constants/layout.js";
 
-const adminAppUrl = import.meta.env.VITE_ADMIN_APP_URL?.trim();
-
 const links = [
   { label: "Home", href: "#home" },
   { label: "Services", href: "#platform-solutions" },
   { label: "APIs", to: "/apis" },
-  ...(adminAppUrl ? [{ label: "Admin", adminHref: adminAppUrl }] : []),
-  { label: "Games", href: "#games" },
+  { label: "Games", to: "/games" },
   { label: "Contact", href: "#get-in-touch" },
 ];
 
@@ -53,16 +50,7 @@ export default function Navbar() {
         <ul className="hidden flex-1 flex-wrap items-center justify-center gap-x-0.5 md:flex lg:gap-x-0.5">
           {links.map((item) => (
             <li key={item.label}>
-              {item.adminHref ? (
-                <a
-                  href={item.adminHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-lg px-2 py-2 text-[11px] font-medium text-white/95 transition hover:bg-white/5 hover:text-white lg:px-2.5 lg:text-xs xl:text-sm"
-                >
-                  {item.label}
-                </a>
-              ) : item.to ? (
+              {item.to ? (
                 <Link
                   to={item.to}
                   className="rounded-lg px-2 py-2 text-[11px] font-medium text-white/95 transition hover:bg-white/5 hover:text-white lg:px-2.5 lg:text-xs xl:text-sm"
@@ -112,18 +100,7 @@ export default function Navbar() {
         >
           <div className="flex flex-1 flex-col gap-1 overflow-y-auto px-4 pb-10 pt-6 sm:px-5">
             {links.map((item) =>
-              item.adminHref ? (
-                <a
-                  key={item.label}
-                  href={item.adminHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="touch-manipulation rounded-xl px-4 py-3.5 text-center text-base font-semibold text-white transition hover:bg-white/10 active:bg-white/15"
-                  onClick={closeMenu}
-                >
-                  {item.mobileLabel ?? item.label}
-                </a>
-              ) : item.to ? (
+              item.to ? (
                 <Link
                   key={item.label}
                   to={item.to}
