@@ -51,6 +51,7 @@ export default function ApiSection() {
                 description={a.description}
                 glow={a.glow}
                 ctaText="View Details →"
+                ctaTo="/apis"
                 ctaClassName={a.ctaClass}
                 mobileTopFade={a.mobileTopFade}
               />

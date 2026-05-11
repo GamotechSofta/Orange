@@ -6,7 +6,7 @@ import { edgeInsetX } from "../constants/layout.js";
 const links = [
   { label: "Home", href: "#home" },
   { label: "Services", href: "#platform-solutions" },
-  { label: "APIs", href: "#api-services" },
+  { label: "APIs", to: "/apis" },
   { label: "Games", href: "#games" },
   { label: "Solutions", href: "#platform-solutions" },
   { label: "About Us", href: "#why-choose-us", mobileLabel: "About" },
@@ -52,12 +52,21 @@ export default function Navbar() {
         <ul className="hidden flex-1 flex-wrap items-center justify-center gap-x-0.5 md:flex lg:gap-x-0.5">
           {links.map((item) => (
             <li key={item.label}>
-              <a
-                href={item.href}
-                className="rounded-lg px-2 py-2 text-[11px] font-medium text-white/95 transition hover:bg-white/5 hover:text-white lg:px-2.5 lg:text-xs xl:text-sm"
-              >
-                {item.label}
-              </a>
+              {item.to ? (
+                <Link
+                  to={item.to}
+                  className="rounded-lg px-2 py-2 text-[11px] font-medium text-white/95 transition hover:bg-white/5 hover:text-white lg:px-2.5 lg:text-xs xl:text-sm"
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <a
+                  href={item.href}
+                  className="rounded-lg px-2 py-2 text-[11px] font-medium text-white/95 transition hover:bg-white/5 hover:text-white lg:px-2.5 lg:text-xs xl:text-sm"
+                >
+                  {item.label}
+                </a>
+              )}
             </li>
           ))}
         </ul>
@@ -92,16 +101,27 @@ export default function Navbar() {
           aria-label="Navigation"
         >
           <div className="flex flex-1 flex-col gap-1 overflow-y-auto px-4 pb-10 pt-6 sm:px-5">
-            {links.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="touch-manipulation rounded-xl px-4 py-3.5 text-center text-base font-semibold text-white transition hover:bg-white/10 active:bg-white/15"
-                onClick={closeMenu}
-              >
-                {item.mobileLabel ?? item.label}
-              </a>
-            ))}
+            {links.map((item) =>
+              item.to ? (
+                <Link
+                  key={item.label}
+                  to={item.to}
+                  className="touch-manipulation rounded-xl px-4 py-3.5 text-center text-base font-semibold text-white transition hover:bg-white/10 active:bg-white/15"
+                  onClick={closeMenu}
+                >
+                  {item.mobileLabel ?? item.label}
+                </Link>
+              ) : (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="touch-manipulation rounded-xl px-4 py-3.5 text-center text-base font-semibold text-white transition hover:bg-white/10 active:bg-white/15"
+                  onClick={closeMenu}
+                >
+                  {item.mobileLabel ?? item.label}
+                </a>
+              )
+            )}
             <a
               href="#get-in-touch"
               className="mt-4 inline-flex min-h-[48px] touch-manipulation items-center justify-center rounded-full bg-gradient-to-r from-emerald-400 to-green-500 px-6 py-3 text-base font-bold text-[#0B0F19] shadow-[0_0_20px_rgba(52,211,153,0.35)]"

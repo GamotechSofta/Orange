@@ -4,6 +4,7 @@ import Footer from "./components/Footer.jsx";
 import Home from "./pages/Home.jsx";
 import Services from "./pages/Services.jsx";
 import Contact from "./pages/Contact.jsx";
+import ApiServices from "./pages/ApiServices.jsx";
 
 function Layout() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<Services />} />
+        <Route path="/apis" element={<ApiServices />} />
         <Route path="/contact" element={<Contact />} />
       </Route>
     </Routes>

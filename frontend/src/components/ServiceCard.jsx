@@ -62,12 +62,16 @@ const apiIconNeon = {
   green: "[&_svg]:drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]",
 };
 
+import { Link } from "react-router-dom";
+
 export default function ServiceCard({
   icon,
   title,
   description,
   ctaText = "Learn More →",
   ctaHref = "#get-in-touch",
+  /** React Router target. If provided, the CTA renders as <Link to=...>. */
+  ctaTo,
   glow = "green",
   ctaClassName = "text-emerald-400 hover:text-emerald-300",
   className = "",
@@ -141,14 +145,25 @@ export default function ServiceCard({
       >
         {description}
       </p>
-      <a
-        href={ctaHref}
-        className={`inline-flex touch-manipulation items-center justify-center font-semibold transition ${isApi ? "mt-2 min-h-[34px] text-[8px] md:mt-3 md:min-h-0 md:text-sm" : "mt-3 min-h-[40px] text-sm sm:min-h-0"} ${
-          isApi ? (ctaClassName || "text-emerald-400 hover:text-emerald-300") : ctaClassName
-        }`}
-      >
-        {ctaText}
-      </a>
+      {ctaTo ? (
+        <Link
+          to={ctaTo}
+          className={`inline-flex touch-manipulation items-center justify-center font-semibold transition ${isApi ? "mt-2 min-h-[34px] text-[8px] md:mt-3 md:min-h-0 md:text-sm" : "mt-3 min-h-[40px] text-sm sm:min-h-0"} ${
+            isApi ? (ctaClassName || "text-emerald-400 hover:text-emerald-300") : ctaClassName
+          }`}
+        >
+          {ctaText}
+        </Link>
+      ) : (
+        <a
+          href={ctaHref}
+          className={`inline-flex touch-manipulation items-center justify-center font-semibold transition ${isApi ? "mt-2 min-h-[34px] text-[8px] md:mt-3 md:min-h-0 md:text-sm" : "mt-3 min-h-[40px] text-sm sm:min-h-0"} ${
+            isApi ? (ctaClassName || "text-emerald-400 hover:text-emerald-300") : ctaClassName
+          }`}
+        >
+          {ctaText}
+        </a>
+      )}
     </article>
   );
 }
