@@ -1,5 +1,6 @@
-import { ArrowRight, Mail, MessageSquare, Phone, User, X } from "lucide-react";
+import { ArrowRight, CheckCircle2, Mail, MessageSquare, Phone, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { api } from "../lib/api.js";
 import { submitWeb3Form } from "../lib/web3forms.js";
 
 const inputBase =
@@ -18,6 +19,8 @@ export default function GetInTouchModal({
   description = "Fill in your details and we will get back to you.",
   subject = "Website — Get in touch",
   variant = "contact",
+  /** Mirrors Web3Forms key: contact | services | game */
+  category = "contact",
 }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -25,6 +28,7 @@ export default function GetInTouchModal({
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -34,6 +38,7 @@ export default function GetInTouchModal({
     setMessage("");
     setError("");
     setLoading(false);
+    setSuccess(false);
   }, [isOpen]);
 
   useEffect(() => {
@@ -44,6 +49,18 @@ export default function GetInTouchModal({
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const prevBody = document.body.style.overflow;
+    const prevHtml = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevBody;
+      document.documentElement.style.overflow = prevHtml;
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -64,7 +81,18 @@ export default function GetInTouchModal({
         message: message.trim(),
         subject,
       });
-      onClose();
+      try {
+        await api.saveLeadMessage({
+          fullName: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          message: message.trim(),
+          category,
+        });
+      } catch (syncErr) {
+        console.warn("[messages] Could not save copy to server:", syncErr?.message || syncErr);
+      }
+      setSuccess(true);
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
     } finally {
@@ -74,7 +102,7 @@ export default function GetInTouchModal({
 
   return (
     <div
-      className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[80] flex items-center justify-center overflow-hidden overscroll-none bg-black/70 p-4 backdrop-blur-sm"
       role="presentation"
       onClick={(ev) => {
         if (ev.target === ev.currentTarget) onClose();
@@ -84,7 +112,7 @@ export default function GetInTouchModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="git-modal-title"
-        className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-white/10 bg-[#0B0F19] p-6 shadow-2xl shadow-black/50 sm:p-8"
+        className="relative max-h-[min(90dvh,90vh)] w-full max-w-lg overflow-y-auto overflow-x-hidden rounded-2xl border border-white/10 bg-[#0B0F19] p-6 shadow-2xl shadow-black/50 sm:p-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -97,10 +125,30 @@ export default function GetInTouchModal({
         </button>
 
         <h2 id="git-modal-title" className="pr-10 text-xl font-bold text-white sm:text-2xl">
-          {title}
+          {success ? "Thank you" : title}
         </h2>
-        <p className="mt-2 text-sm text-slate-400">{description}</p>
+        <p className="mt-2 text-sm text-slate-400">
+          {success
+            ? "Your message has been submitted. We'll reply shortly."
+            : description}
+        </p>
 
+        {success ? (
+          <div className="mt-8 flex flex-col items-center text-center">
+            <CheckCircle2
+              className={`h-16 w-16 shrink-0 ${variant === "cta" ? "text-violet-400" : "text-emerald-400"}`}
+              strokeWidth={1.25}
+              aria-hidden
+            />
+            <button
+              type="button"
+              onClick={onClose}
+              className={`mt-8 inline-flex min-h-[48px] w-full items-center justify-center gap-2 ${primaryClass}`}
+            >
+              Close
+            </button>
+          </div>
+        ) : (
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
               <label htmlFor="git-name" className={labelClass}>
@@ -200,6 +248,7 @@ export default function GetInTouchModal({
               {!loading ? <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden /> : null}
             </button>
           </form>
+        )}
       </div>
     </div>
   );

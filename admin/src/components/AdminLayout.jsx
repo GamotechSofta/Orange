@@ -8,6 +8,7 @@ import {
   Layers,
   LogOut,
   PanelTop,
+  Mail,
   Rocket,
   Users,
 } from "lucide-react";
@@ -71,6 +72,7 @@ export default function AdminLayout() {
     "api-services": false,
     games: false,
     platforms: false,
+    messages: false,
   });
 
   const panel = new URLSearchParams(location.search).get("panel");
@@ -95,15 +97,35 @@ export default function AdminLayout() {
     };
   }, []);
 
+  /** Only one catalog / messages dropdown open at a time (accordion). */
   useEffect(() => {
     const p = location.pathname;
-    setExpanded((prev) => ({
-      ...prev,
-      ...(p === "/api-services" ? { "api-services": true } : {}),
-      ...(p === "/games" ? { games: true } : {}),
-      ...(p === "/platforms" ? { platforms: true } : {}),
-    }));
+    setExpanded({
+      "api-services": p === "/api-services",
+      games: p === "/games",
+      platforms: p === "/platforms",
+      messages: p.startsWith("/messages"),
+    });
   }, [location.pathname]);
+
+  const toggleAccordionNav = useCallback((id) => {
+    setExpanded((prev) => {
+      if (prev[id]) {
+        return {
+          "api-services": false,
+          games: false,
+          platforms: false,
+          messages: false,
+        };
+      }
+      return {
+        "api-services": id === "api-services",
+        games: id === "games",
+        platforms: id === "platforms",
+        messages: id === "messages",
+      };
+    });
+  }, []);
 
   const loadUser = useCallback(() => {
     if (!localStorage.getItem("token")) {
@@ -189,9 +211,7 @@ export default function AdminLayout() {
                 <div key={sec.id} className="w-full">
                   <button
                     type="button"
-                    onClick={() =>
-                      setExpanded((prev) => ({ ...prev, [sec.id]: !prev[sec.id] }))
-                    }
+                    onClick={() => toggleAccordionNav(sec.id)}
                     className={`block w-full rounded-xl text-left ${navFocus}`}
                     aria-expanded={isOpen}
                   >
@@ -261,6 +281,66 @@ export default function AdminLayout() {
                 )
               }
             </NavLink>
+
+            <div className="w-full">
+              <button
+                type="button"
+                onClick={() => toggleAccordionNav("messages")}
+                className={`block w-full rounded-xl text-left ${navFocus}`}
+                aria-expanded={expanded.messages}
+              >
+                {location.pathname.startsWith("/messages") ? (
+                  <span className={navActiveWrap}>
+                    <span className={navActiveInnerRow}>
+                      <span className="flex min-w-0 items-center gap-3">
+                        <Mail className="size-[18px] shrink-0 text-white" strokeWidth={1.75} />
+                        <span className="truncate">Messages</span>
+                      </span>
+                      <ChevronDown
+                        className={`size-[18px] shrink-0 text-white/75 transition-transform ${expanded.messages ? "rotate-180" : ""}`}
+                        strokeWidth={1.75}
+                        aria-hidden
+                      />
+                    </span>
+                  </span>
+                ) : (
+                  <span className={`${navInactive} justify-between gap-2`}>
+                    <span className="flex min-w-0 items-center gap-3">
+                      <Mail className="size-[18px] shrink-0" strokeWidth={1.75} />
+                      <span className="truncate">Messages</span>
+                    </span>
+                    <ChevronDown
+                      className={`size-[18px] shrink-0 text-white/35 transition-transform ${expanded.messages ? "rotate-180" : ""}`}
+                      strokeWidth={1.75}
+                      aria-hidden
+                    />
+                  </span>
+                )}
+              </button>
+
+              {expanded.messages ? (
+                <div className="ml-2 mt-1.5 space-y-1 border-l border-white/[0.08] py-0.5 pl-2.5">
+                  <NavLink
+                    to="/messages/contact"
+                    className={({ isActive }) => (isActive ? subLinkActive : subLinkIdle)}
+                  >
+                    Contact Message
+                  </NavLink>
+                  <NavLink
+                    to="/messages/api-services"
+                    className={({ isActive }) => (isActive ? subLinkActive : subLinkIdle)}
+                  >
+                    API services Message
+                  </NavLink>
+                  <NavLink
+                    to="/messages/games"
+                    className={({ isActive }) => (isActive ? subLinkActive : subLinkIdle)}
+                  >
+                    Games Message
+                  </NavLink>
+                </div>
+              ) : null}
+            </div>
           </nav>
 
           <div className="mt-auto shrink-0 space-y-3 border-t border-white/[0.08] pt-5">

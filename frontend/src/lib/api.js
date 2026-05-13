@@ -78,4 +78,13 @@ export const api = {
       body: JSON.stringify(payload),
     }),
   deleteUser: (id) => apiFetch(`/users/${id}`, { method: "DELETE", withAuth: true }),
+  /**
+   * Persist lead alongside Web3Forms (public; no auth).
+   * @param {{ fullName: string, email: string, phone?: string, message: string, category: "contact"|"services"|"game" }} payload
+   */
+  saveLeadMessage: (payload) =>
+    apiFetch("/messages", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
 };

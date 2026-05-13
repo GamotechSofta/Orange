@@ -25,7 +25,7 @@ export default function AdminUsers() {
   return (
     <AdminResourcePage
       title="Users"
-      subtitle="End users only (role: user). Admin accounts are not listed here."
+      subtitle=""
       fetchItems={fetchUsersOnly}
       columns={columns}
       hideEdit

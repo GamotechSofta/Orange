@@ -1,5 +1,6 @@
-import { ArrowRight, Mail, MessageSquare, Phone, User } from "lucide-react";
+import { ArrowRight, CheckCircle2, Mail, MessageSquare, Phone, User } from "lucide-react";
 import { useState } from "react";
+import { api } from "../lib/api.js";
 import { getWeb3ContactKey, submitWeb3Form } from "../lib/web3forms.js";
 
 const inputBase =
@@ -10,6 +11,7 @@ const labelClass = "mb-1.5 block text-xs font-semibold uppercase tracking-wider 
 export default function ContactForm({ className = "" }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -21,6 +23,7 @@ export default function ContactForm({ className = "" }) {
     const message = String(fd.get("message") || "").trim();
 
     setError("");
+    setSuccess(false);
     setLoading(true);
     try {
       await submitWeb3Form(getWeb3ContactKey(), {
@@ -30,7 +33,19 @@ export default function ContactForm({ className = "" }) {
         message,
         subject: "Contact section — Get in touch",
       });
+      try {
+        await api.saveLeadMessage({
+          fullName: name,
+          email,
+          phone,
+          message,
+          category: "contact",
+        });
+      } catch (syncErr) {
+        console.warn("[messages] Could not save copy to server:", syncErr?.message || syncErr);
+      }
       form.reset();
+      setSuccess(true);
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
     } finally {
@@ -150,6 +165,19 @@ export default function ContactForm({ className = "" }) {
           />
         ) : null}
       </button>
+
+      {success ? (
+        <div
+          className="flex gap-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-4 text-left"
+          role="status"
+        >
+          <CheckCircle2 className="mt-0.5 h-6 w-6 shrink-0 text-emerald-400" strokeWidth={2} aria-hidden />
+          <div>
+            <p className="font-semibold text-emerald-100">Your message has been submitted.</p>
+            <p className="mt-1 text-sm text-emerald-100/80">We&apos;ll reply shortly.</p>
+          </div>
+        </div>
+      ) : null}
     </form>
   );
 }

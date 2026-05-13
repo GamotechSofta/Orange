@@ -33,6 +33,7 @@ export function Web3ContactModalProvider({ children }) {
         description="Share your details and we'll respond as soon as possible."
         subject="Header — Get in touch"
         variant="contact"
+        category="contact"
       />
       <GetInTouchModal
         isOpen={apisOpen}
@@ -42,6 +43,7 @@ export function Web3ContactModalProvider({ children }) {
         description="Tell us about your API integration — we'll follow up shortly."
         subject="APIs — Get in touch"
         variant="cta"
+        category="services"
       />
       <GetInTouchModal
         isOpen={gamesOpen}
@@ -51,6 +53,7 @@ export function Web3ContactModalProvider({ children }) {
         description="Tell us about your game or platform needs — we'll follow up shortly."
         subject="Games — Get in touch"
         variant="cta"
+        category="game"
       />
     </Web3ContactModalContext.Provider>
   );

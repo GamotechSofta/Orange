@@ -8,6 +8,7 @@ import AdminPlatforms from "./pages/AdminPlatforms.jsx";
 import AdminUsers from "./pages/AdminUsers.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminSettings from "./pages/AdminSettings.jsx";
+import AdminMessages from "./pages/AdminMessages.jsx";
 
 export default function App() {
   return (
@@ -20,6 +21,8 @@ export default function App() {
           <Route path="games" element={<AdminGames />} />
           <Route path="platforms" element={<AdminPlatforms />} />
           <Route path="users" element={<AdminUsers />} />
+          <Route path="messages" element={<Navigate to="/messages/contact" replace />} />
+          <Route path="messages/:kind" element={<AdminMessages />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
       </Route>

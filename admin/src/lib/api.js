@@ -132,4 +132,5 @@ export const api = {
       body,
     });
   },
+  getMessagesAll: () => apiFetch("/messages/all", { withAuth: true }),
 };
