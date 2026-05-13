@@ -1,4 +1,5 @@
 import { Routes, Route, Outlet } from "react-router-dom";
+import { Web3ContactModalProvider } from "./context/Web3ContactModalContext.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import Home from "./pages/Home.jsx";
@@ -22,15 +23,17 @@ function Layout() {
 
 export default function App() {
   return (
-    <Routes>
-      <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/apis" element={<ApiServices />} />
-        <Route path="/apis/:id" element={<ApiServiceDetail />} />
-        <Route path="/games" element={<Games />} />
-        <Route path="/contact" element={<Contact />} />
-      </Route>
-    </Routes>
+    <Web3ContactModalProvider>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/apis" element={<ApiServices />} />
+          <Route path="/apis/:id" element={<ApiServiceDetail />} />
+          <Route path="/games" element={<Games />} />
+          <Route path="/contact" element={<Contact />} />
+        </Route>
+      </Routes>
+    </Web3ContactModalProvider>
   );
 }

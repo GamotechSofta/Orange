@@ -11,6 +11,7 @@ const authRoutes = require("./routes/authRoutes");
 const platformRoutes = require("./routes/platformRoutes");
 const apiServiceRoutes = require("./routes/apiServiceRoutes");
 const gameRoutes = require("./routes/gameRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
 
 connectDB();
 
@@ -52,12 +53,14 @@ app.use("/api/auth", authRoutes);
 app.use("/api/platforms", platformRoutes);
 app.use("/api/api-services", apiServiceRoutes);
 app.use("/api/games", gameRoutes);
+app.use("/api/upload", uploadRoutes);
 
 app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/platforms", platformRoutes);
 app.use("/api-services", apiServiceRoutes);
 app.use("/games", gameRoutes);
+app.use("/upload", uploadRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

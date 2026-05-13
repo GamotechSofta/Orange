@@ -5,8 +5,10 @@ import useApiResource from "../hooks/useApiResource.js";
 import { api } from "../lib/api.js";
 import { getIcon } from "../lib/iconRegistry.jsx";
 import { pageShell } from "../constants/layout.js";
+import { useWeb3ContactModals } from "../context/Web3ContactModalContext.jsx";
 
 export default function ApiServices() {
+  const { openApisModal } = useWeb3ContactModals();
   const { data: apis, loading, error } = useApiResource(() => api.getApiServices(), []);
 
   useEffect(() => {
@@ -72,13 +74,14 @@ export default function ApiServices() {
           <p className="mx-auto mt-2 max-w-xl text-sm text-slate-300">
             Talk to our team — we'll set you up with API keys, sample code, and a free trial.
           </p>
-          <Link
-            to="/#get-in-touch"
+          <button
+            type="button"
+            onClick={() => openApisModal()}
             className="mt-6 inline-flex min-h-[46px] items-center gap-2 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 px-6 py-3 text-sm font-bold text-white shadow-[0_0_22px_-4px_rgba(139,92,246,0.55)] transition hover:scale-[1.02]"
           >
             Get In Touch
             <ArrowRight className="h-4 w-4" strokeWidth={2} />
-          </Link>
+          </button>
         </section>
       </div>
     </div>

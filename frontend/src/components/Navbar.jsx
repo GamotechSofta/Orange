@@ -2,17 +2,24 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, Sparkles, X } from "lucide-react";
 import { edgeInsetX } from "../constants/layout.js";
+import { useWeb3ContactModals } from "../context/Web3ContactModalContext.jsx";
 
 const links = [
   { label: "Home", href: "#home" },
   { label: "Services", href: "#platform-solutions" },
   { label: "APIs", to: "/apis" },
   { label: "Games", to: "/games" },
-  { label: "Contact", href: "#get-in-touch" },
+  { label: "Contact", to: "/#get-in-touch" },
 ];
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { openContactModal } = useWeb3ContactModals();
+
+  const openContact = () => {
+    openContactModal();
+    setMenuOpen(false);
+  };
 
   useEffect(() => {
     if (menuOpen) {
@@ -70,12 +77,13 @@ export default function Navbar() {
         </ul>
 
         <div className="flex shrink-0 items-center gap-2">
-          <a
-            href="#get-in-touch"
+          <button
+            type="button"
+            onClick={openContactModal}
             className="hidden rounded-full bg-gradient-to-r from-emerald-400 to-green-500 px-4 py-2.5 text-xs font-bold text-[#0B0F19] shadow-[0_0_18px_rgba(52,211,153,0.35)] transition hover:scale-[1.02] hover:shadow-[0_0_26px_rgba(52,211,153,0.45)] md:inline-flex lg:text-sm"
           >
             Get In Touch
-          </a>
+          </button>
 
           <button
             type="button"
@@ -120,13 +128,13 @@ export default function Navbar() {
                 </a>
               )
             )}
-            <a
-              href="#get-in-touch"
-              className="mt-4 inline-flex min-h-[48px] touch-manipulation items-center justify-center rounded-full bg-gradient-to-r from-emerald-400 to-green-500 px-6 py-3 text-base font-bold text-[#0B0F19] shadow-[0_0_20px_rgba(52,211,153,0.35)]"
-              onClick={closeMenu}
+            <button
+              type="button"
+              className="mt-4 inline-flex min-h-[48px] w-full touch-manipulation items-center justify-center rounded-full bg-gradient-to-r from-emerald-400 to-green-500 px-6 py-3 text-base font-bold text-[#0B0F19] shadow-[0_0_20px_rgba(52,211,153,0.35)]"
+              onClick={openContact}
             >
               Get In Touch
-            </a>
+            </button>
           </div>
         </div>
       ) : null}

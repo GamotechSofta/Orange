@@ -1,12 +1,13 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
 import { ArrowRight, Gamepad2 } from "lucide-react";
 import GameCard from "../components/GameCard.jsx";
 import useApiResource from "../hooks/useApiResource.js";
 import { api } from "../lib/api.js";
 import { pageShell } from "../constants/layout.js";
+import { useWeb3ContactModals } from "../context/Web3ContactModalContext.jsx";
 
 export default function Games() {
+  const { openGamesModal } = useWeb3ContactModals();
   const { data: games, loading, error } = useApiResource(() => api.getGames(), []);
 
   useEffect(() => {
@@ -70,13 +71,14 @@ export default function Games() {
             Our team designs, builds and ships engaging games for gaming platforms. Tell us your
             idea — we'll send a proposal within 24h.
           </p>
-          <Link
-            to="/#get-in-touch"
+          <button
+            type="button"
+            onClick={() => openGamesModal()}
             className="mt-6 inline-flex min-h-[46px] items-center gap-2 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 px-6 py-3 text-sm font-bold text-white shadow-[0_0_22px_-4px_rgba(139,92,246,0.55)] transition hover:scale-[1.02]"
           >
             Get In Touch
             <ArrowRight className="h-4 w-4" strokeWidth={2} />
-          </Link>
+          </button>
         </section>
       </div>
     </div>

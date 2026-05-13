@@ -1,5 +1,6 @@
-import { ArrowRight, CheckCircle2, Mail, MessageSquare, Phone, User } from "lucide-react";
+import { ArrowRight, Mail, MessageSquare, Phone, User } from "lucide-react";
 import { useState } from "react";
+import { getWeb3ContactKey, submitWeb3Form } from "../lib/web3forms.js";
 
 const inputBase =
   "w-full min-h-[50px] rounded-xl border border-white/10 bg-[#0a0f18]/90 px-4 py-3 text-sm text-white shadow-inner shadow-black/20 outline-none backdrop-blur-sm transition placeholder:text-slate-500 focus:border-emerald-500/50 focus:bg-[#0a0f18] focus:ring-2 focus:ring-emerald-500/20";
@@ -7,11 +8,34 @@ const inputBase =
 const labelClass = "mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-400";
 
 export default function ContactForm({ className = "" }) {
-  const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    setSent(true);
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const name = String(fd.get("name") || "").trim();
+    const email = String(fd.get("email") || "").trim();
+    const phone = String(fd.get("phone") || "").trim();
+    const message = String(fd.get("message") || "").trim();
+
+    setError("");
+    setLoading(true);
+    try {
+      await submitWeb3Form(getWeb3ContactKey(), {
+        name,
+        email,
+        phone,
+        message,
+        subject: "Contact section — Get in touch",
+      });
+      form.reset();
+    } catch (err) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -103,29 +127,29 @@ export default function ContactForm({ className = "" }) {
         </div>
       </div>
 
+      {error ? (
+        <div
+          className="rounded-xl border border-rose-500/35 bg-rose-500/10 px-4 py-3 text-sm text-rose-100"
+          role="alert"
+        >
+          {error}
+        </div>
+      ) : null}
+
       <button
         type="submit"
-        className="group inline-flex min-h-[52px] w-full touch-manipulation items-center justify-center gap-2 rounded-full bg-gradient-to-r from-emerald-400 to-green-500 px-6 py-3 text-sm font-bold text-[#0B0F19] shadow-[0_0_24px_rgba(52,211,153,0.35)] transition duration-300 hover:scale-[1.02] hover:shadow-[0_0_32px_rgba(52,211,153,0.45)] active:scale-[0.99]"
+        disabled={loading}
+        className="group inline-flex min-h-[52px] w-full touch-manipulation items-center justify-center gap-2 rounded-full bg-gradient-to-r from-emerald-400 to-green-500 px-6 py-3 text-sm font-bold text-[#0B0F19] shadow-[0_0_24px_rgba(52,211,153,0.35)] transition duration-300 hover:scale-[1.02] hover:shadow-[0_0_32px_rgba(52,211,153,0.45)] active:scale-[0.99] disabled:opacity-60"
       >
-        Send message
-        <ArrowRight
-          className="h-4 w-4 transition group-hover:translate-x-0.5"
-          strokeWidth={2.5}
-          aria-hidden
-        />
+        {loading ? "Sending…" : "Send message"}
+        {!loading ? (
+          <ArrowRight
+            className="h-4 w-4 transition group-hover:translate-x-0.5"
+            strokeWidth={2.5}
+            aria-hidden
+          />
+        ) : null}
       </button>
-
-      {sent && (
-        <div
-          className="flex items-start gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3"
-          role="status"
-        >
-          <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-400" strokeWidth={2} aria-hidden />
-          <p className="text-sm font-medium leading-snug text-emerald-100">
-            Thanks — we&apos;ve received your message and will get back to you shortly.
-          </p>
-        </div>
-      )}
     </form>
   );
 }

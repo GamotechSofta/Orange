@@ -21,13 +21,18 @@ export async function apiFetch(path, options = {}) {
   const { withAuth = false, ...rest } = options;
   const url = `${BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 
+  const isFormData =
+    typeof FormData !== "undefined" && rest.body instanceof FormData;
+
+  const headers = {
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
+    ...(withAuth ? getAuthHeaders() : {}),
+    ...(rest.headers || {}),
+  };
+
   const res = await fetch(url, {
     ...rest,
-    headers: {
-      "Content-Type": "application/json",
-      ...(withAuth ? getAuthHeaders() : {}),
-      ...(rest.headers || {}),
-    },
+    headers,
   });
 
   let json = null;
@@ -118,4 +123,13 @@ export const api = {
       body: JSON.stringify(payload),
     }),
   deleteUser: (id) => apiFetch(`/users/${id}`, { method: "DELETE", withAuth: true }),
+  uploadImage: (file) => {
+    const body = new FormData();
+    body.append("image", file);
+    return apiFetch("/upload/image", {
+      method: "POST",
+      withAuth: true,
+      body,
+    });
+  },
 };

@@ -1,6 +1,7 @@
-import { Plus, Trash2, X } from "lucide-react";
+import { Plus, Trash2, Upload, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { api } from "../lib/api.js";
 
 /** Table header — violet / purple accent, all catalog pages */
 const CATALOG_TABLE_HEAD =
@@ -142,6 +143,76 @@ function PointListEditor({ field, value, onChange, disabled }) {
   );
 }
 
+function ImageUrlField({ value, onChange, disabled, baseInput }) {
+  const [uploading, setUploading] = useState(false);
+  const [uploadErr, setUploadErr] = useState("");
+
+  const handleFile = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file || disabled) return;
+    setUploadErr("");
+    setUploading(true);
+    try {
+      const res = await api.uploadImage(file);
+      const url = res?.data?.url;
+      if (!url) throw new Error("No image URL returned from server");
+      onChange(url);
+    } catch (err) {
+      setUploadErr(err.message || "Upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const trimmed = typeof value === "string" ? value.trim() : "";
+  const showPreview = /^https?:\/\//i.test(trimmed);
+
+  return (
+    <div className="space-y-2">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-stretch">
+        <input
+          type="text"
+          disabled={disabled}
+          value={value ?? ""}
+          placeholder="Paste a URL or upload an image (saved to Cloudinary)"
+          onChange={(e) => onChange(e.target.value)}
+          className={`${baseInput} min-w-0 flex-1`}
+        />
+        <label
+          className={`inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg border border-violet-400/35 bg-violet-500/10 px-4 py-2.5 text-sm font-semibold text-violet-200 transition hover:bg-violet-500/20 ${
+            disabled || uploading ? "pointer-events-none opacity-50" : ""
+          }`}
+        >
+          <input
+            type="file"
+            accept="image/*"
+            className="sr-only"
+            disabled={disabled || uploading}
+            onChange={handleFile}
+          />
+          <Upload className="size-4 shrink-0" strokeWidth={2} aria-hidden />
+          {uploading ? "Uploading…" : "Choose image"}
+        </label>
+      </div>
+      {uploadErr ? (
+        <p className="text-xs text-rose-300" role="alert">
+          {uploadErr}
+        </p>
+      ) : null}
+      {showPreview ? (
+        <div className="overflow-hidden rounded-lg border border-white/10 bg-black/20 p-2">
+          <img
+            src={trimmed}
+            alt=""
+            className="mx-auto max-h-36 max-w-full object-contain"
+          />
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function prettyLabel(key) {
   if (key === "_id") return "ID";
   return key
@@ -166,7 +237,7 @@ function FormFields({ formFields, formData, setFormData, disabled }) {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {formFields.map((field) => (
-        <label
+        <div
           key={field.key}
           className={`flex flex-col gap-1.5 text-sm ${field.fullWidth ? "md:col-span-2" : ""}`}
         >
@@ -231,6 +302,13 @@ function FormFields({ formFields, formData, setFormData, disabled }) {
                 JSON. Saved as parsed value; invalid JSON saves as raw text (you'll see a server error).
               </span>
             </>
+          ) : field.type === "imageUrl" ? (
+            <ImageUrlField
+              value={formData[field.key]}
+              onChange={(next) => setFormData((prev) => ({ ...prev, [field.key]: next }))}
+              disabled={disabled}
+              baseInput={baseInput}
+            />
           ) : (
             <input
               type={field.type === "number" ? "number" : "text"}
@@ -253,7 +331,7 @@ function FormFields({ formFields, formData, setFormData, disabled }) {
               className={baseInput}
             />
           )}
-        </label>
+        </div>
       ))}
     </div>
   );
@@ -506,8 +584,11 @@ export default function AdminCatalogPage({
                   items.map((item) => (
                     <tr key={item._id} className={`border-t border-white/[0.06] ${a.rowHover}`}>
                       {columns.map((col) => (
-                        <td key={`${item._id}-${col.key}`} className="max-w-[14rem] px-4 py-3">
-                          <div className="truncate">
+                        <td
+                          key={`${item._id}-${col.key}`}
+                          className={col.cellWide ? "min-w-[7rem] max-w-[16rem] px-4 py-3" : "max-w-[14rem] px-4 py-3"}
+                        >
+                          <div className={col.cellNoTruncate ? "min-w-0" : "truncate"}>
                             {col.render
                               ? col.render(item[col.key], item)
                               : String(item[col.key] ?? "—")}
