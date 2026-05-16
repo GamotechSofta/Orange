@@ -7,10 +7,12 @@ import {
   LayoutDashboard,
   Layers,
   LogOut,
-  PanelTop,
   Mail,
+  Menu,
+  PanelTop,
   Rocket,
   Users,
+  X,
 } from "lucide-react";
 import { api } from "../lib/api.js";
 
@@ -74,9 +76,30 @@ export default function AdminLayout() {
     platforms: false,
     messages: false,
   });
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const panel = new URLSearchParams(location.search).get("panel");
   const isDashboard = location.pathname === "/";
+
+  const closeMobileNav = useCallback(() => setMobileNavOpen(false), []);
+
+  useEffect(() => {
+    closeMobileNav();
+  }, [location.pathname, closeMobileNav]);
+
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    function onKey(e) {
+      if (e.key === "Escape") closeMobileNav();
+    }
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [mobileNavOpen, closeMobileNav]);
 
   useEffect(() => {
     let cancelled = false;
@@ -167,8 +190,33 @@ export default function AdminLayout() {
 
   return (
     <div className="h-[100dvh] overflow-hidden bg-[#0b0e14] text-white">
+      <div
+        className={`fixed inset-0 z-40 bg-black/70 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
+          mobileNavOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        role="presentation"
+        aria-hidden={!mobileNavOpen}
+        onClick={closeMobileNav}
+      />
+
       <div className="mx-auto flex h-full w-full max-w-screen-2xl flex-col md:flex-row">
-        <aside className="no-scrollbar flex max-h-[42vh] shrink-0 flex-col overflow-y-auto overscroll-contain border-b border-white/[0.06] bg-[#0f131c]/95 px-4 py-5 backdrop-blur-xl sm:px-5 md:h-full md:max-h-[100dvh] md:w-[280px] md:border-b-0 md:border-r md:border-white/[0.07] lg:w-[288px]">
+        <aside
+          className={`no-scrollbar fixed inset-y-0 left-0 z-50 flex h-full w-[min(288px,88vw)] max-w-[88vw] flex-col overflow-y-auto overscroll-contain border-r border-white/[0.07] bg-[#0f131c]/98 px-4 py-5 shadow-2xl shadow-black/50 backdrop-blur-xl transition-transform duration-300 ease-out sm:px-5 md:static md:z-auto md:max-h-[100dvh] md:w-[280px] md:max-w-none md:translate-x-0 md:shadow-none lg:w-[288px] ${
+            mobileNavOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+          }`}
+        >
+          <div className="mb-4 flex items-center justify-between md:hidden">
+            <p className="text-sm font-semibold text-white/80">Menu</p>
+            <button
+              type="button"
+              onClick={closeMobileNav}
+              className="rounded-lg p-2 text-white/70 transition hover:bg-white/10 hover:text-white"
+              aria-label="Close menu"
+            >
+              <X className="size-5" strokeWidth={2} />
+            </button>
+          </div>
+
           <div className="flex items-center gap-3">
             <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 via-purple-600 to-indigo-700 shadow-lg shadow-violet-600/30 ring-1 ring-violet-400/25">
               <Box className="size-[22px] text-white" strokeWidth={2} />
@@ -182,7 +230,7 @@ export default function AdminLayout() {
           </div>
 
           <nav className="mt-8 flex shrink-0 flex-col gap-2">
-            <NavLink to="/" end className={`block w-full rounded-xl ${navFocus}`}>
+            <NavLink to="/" end onClick={closeMobileNav} className={`block w-full rounded-xl ${navFocus}`}>
               {({ isActive }) =>
                 isActive ? (
                   <span className={navActiveWrap}>
@@ -248,12 +296,14 @@ export default function AdminLayout() {
                     <div className="ml-2 mt-1.5 space-y-1 border-l border-white/[0.08] py-0.5 pl-2.5">
                       <Link
                         to={sec.basePath}
+                        onClick={closeMobileNav}
                         className={onRoute && panel !== "add" ? subLinkActive : subLinkIdle}
                       >
                         {sec.showLabel}
                       </Link>
                       <Link
                         to={`${sec.basePath}?panel=add`}
+                        onClick={closeMobileNav}
                         className={onRoute && panel === "add" ? subLinkActive : subLinkIdle}
                       >
                         {sec.addLabel}
@@ -264,7 +314,7 @@ export default function AdminLayout() {
               );
             })}
 
-            <NavLink to="/users" className={`block w-full rounded-xl ${navFocus}`}>
+            <NavLink to="/users" onClick={closeMobileNav} className={`block w-full rounded-xl ${navFocus}`}>
               {({ isActive }) =>
                 isActive ? (
                   <span className={navActiveWrap}>
@@ -322,18 +372,21 @@ export default function AdminLayout() {
                 <div className="ml-2 mt-1.5 space-y-1 border-l border-white/[0.08] py-0.5 pl-2.5">
                   <NavLink
                     to="/messages/contact"
+                    onClick={closeMobileNav}
                     className={({ isActive }) => (isActive ? subLinkActive : subLinkIdle)}
                   >
                     Contact Message
                   </NavLink>
                   <NavLink
                     to="/messages/api-services"
+                    onClick={closeMobileNav}
                     className={({ isActive }) => (isActive ? subLinkActive : subLinkIdle)}
                   >
                     API services Message
                   </NavLink>
                   <NavLink
                     to="/messages/games"
+                    onClick={closeMobileNav}
                     className={({ isActive }) => (isActive ? subLinkActive : subLinkIdle)}
                   >
                     Games Message
@@ -361,22 +414,55 @@ export default function AdminLayout() {
                 All systems operational
               </p>
             </div>
-            {!isDashboard ? (
-              <button
-                type="button"
-                onClick={onSignOut}
-                className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-transparent py-2.5 text-sm font-medium text-white/80 transition hover:border-white/20 hover:bg-white/[0.04] hover:text-white"
-              >
-                <LogOut className="size-4" strokeWidth={1.75} />
-                Sign out
-              </button>
-            ) : null}
+            <button
+              type="button"
+              onClick={onSignOut}
+              className={`flex w-full items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-transparent py-2.5 text-sm font-medium text-white/80 transition hover:border-white/20 hover:bg-white/[0.04] hover:text-white ${isDashboard ? "md:hidden" : ""}`}
+            >
+              <LogOut className="size-4" strokeWidth={1.75} />
+              Sign out
+            </button>
           </div>
         </aside>
 
         <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-[#0a0c12]">
+          <header className="flex shrink-0 items-center gap-2 border-b border-white/[0.08] bg-[#0a0c12]/95 px-4 py-3 backdrop-blur-md md:hidden">
+            <button
+              type="button"
+              onClick={() => setMobileNavOpen(true)}
+              className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-white/[0.12] bg-white/[0.04] text-white transition hover:border-violet-500/40 hover:bg-violet-950/40"
+              aria-label="Open menu"
+            >
+              <Menu className="size-5" strokeWidth={2} />
+            </button>
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+              <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-indigo-700">
+                <Box className="size-4 text-white" strokeWidth={2} />
+              </div>
+              <span className="truncate text-sm font-bold text-white">Orange Admin</span>
+            </div>
+            <Link
+              to="/settings"
+              onClick={closeMobileNav}
+              className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.04] transition hover:border-violet-500/35 hover:bg-violet-950/30"
+              aria-label="Settings"
+            >
+              <span className="flex size-7 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-indigo-700 text-[10px] font-bold text-white">
+                {user ? displayInitials(user.name, user.email) : "—"}
+              </span>
+            </Link>
+            <button
+              type="button"
+              onClick={onSignOut}
+              className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.12] bg-transparent text-white/80 transition hover:bg-white/[0.05] hover:text-white"
+              aria-label="Sign out"
+            >
+              <LogOut className="size-4" strokeWidth={1.75} />
+            </button>
+          </header>
+
           {isDashboard ? (
-            <div className="shrink-0 border-b border-white/10 px-4 py-1.5 md:px-8">
+            <div className="hidden shrink-0 border-b border-white/10 px-4 py-1.5 md:block md:px-8">
               <div className="flex h-10 items-center justify-end gap-2 md:h-9">
                 <Link
                   to="/settings"
